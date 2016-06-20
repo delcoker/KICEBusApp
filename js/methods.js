@@ -41,8 +41,13 @@ function login() {
 
     $("#routes").replaceWith(listings);
 
-    window.open("index.html#route_select", "_self");
+    $('#routes').listview().listview('refresh');
 
+
+    window.open("index.html#route_select", "_self");
+//    $(document).on('pageinit', '#route_select', function () {
+//
+//    });
 }
 
 function driver_select(id) {
@@ -76,6 +81,8 @@ function driver_select(id) {
     listings += '</ul>';
 
     $("#drivers").replaceWith(listings);
+
+    $('#drivers').listview().listview('refresh');
 
     window.open("index.html#driver_select", "_self");
 }
@@ -116,6 +123,8 @@ function bus_select(id) {
     listings += '</ul>';
 
     $("#busses").replaceWith(listings);
+
+    $('#busses').listview().listview('refresh');
 
     window.open("index.html#bus_select", "_self");
 
@@ -170,6 +179,8 @@ function passengers_select(id) {
     listings += '</fieldset>';
 
     $("#passengers").replaceWith(listings);
+
+    $('#passengers').listview().listview('refresh');
 
     window.open("index.html#passengers_select", "_self");
 
