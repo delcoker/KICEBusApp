@@ -48,6 +48,50 @@
             </div>
         </div>
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <div data-role="page" data-dialog="false" id="settings_select" data-theme="c">
+
+            <div data-role="header">
+                <h1>Bus App </h1>
+                <a href="#pageone" data-role="button" data-icon="" data-iconpos="right" class="ui-btn-left"><div class="caretaker_name">Hi </div></a>
+                <a href="#pageone" data-role="button" data-icon="arrow-u" data-iconpos="right" class="ui-btn-right"  onclick="logout()">Logout</a>
+            </div>
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - -->
+            <div role="main" class="ui-content">
+                <img src="resources/ash_logo.png" width='128' height="30" alt="" style='float: right'/>
+                <h1>Settings:</h1>
+
+                <h2>Routes</h2>
+                <ul data-role="listview" data-inset="true" data-filter="true" id="settings_route">
+                    <li><a href="#route_save" onclick="route_save()">ROUTES</a></li>
+                </ul>
+
+                <h2>Drivers</h2>
+                <ul data-role="listview" data-inset="true" data-filter="true" id="settings_driver">
+                    <li><a href="#driver_save" onclick="driver_save()">DRIVERS</a></li>
+                </ul>
+
+                <h2>Busses</h2>
+
+                <ul data-role="listview" data-inset="true" data-filter="true" id="settings_bus">
+                    <li><a href="#bus_save" onclick="bus_save()">
+                            <img src='resources/2.jpg' alt=''>
+                            <h2>BUSSES</h2>
+                            <p>Bus 1</p>
+                        </a></li>
+                </ul>
+                <br>
+
+                <a href="#" role="button" class="ui-shadow ui-btn ui-corner-all" data-transition="flip" onclick="settings_save()">Save</a>
+            </div>
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+            <div data-role="footer">
+                <div data-role="controlgroup" data-type="horizontal">
+                    <!--<Caption of group:</p>-->
+                    <a href="#" data-icon="arrow-l"  data-role="button" data-rel="back">Go Back</a>
+                </div>
+            </div>
+        </div>
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
         <div data-role="page" data-dialog="false" id="route_select" data-theme="c">
 
             <div data-role="header">
@@ -74,58 +118,7 @@
                 </div>
             </div>
         </div>
-        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-        <div data-role="page" id="driver_select" data-theme="c">
 
-            <div data-role="header">
-                <h1>Bus App </h1>
-                <a href="#pageone" data-role="button" data-icon="" data-iconpos="right" class="ui-btn-left"><div class="caretaker_name">Hi </div></a>
-                <a href="#pageone" data-role="button" data-icon="arrow-u" data-iconpos="right" class="ui-btn-right"  onclick="logout()">Logout</a>
-            </div>
-            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - -->
-            <div role="main" class="ui-content">
-                <img src="resources/ash_logo.png" width='128' height="30" alt="" style='float: right'/>
-                <h1>Drivers</h1>
-
-                <ul data-role="listview" data-inset="true" data-filter="true" id="drivers">
-                    <li><a href="#bus_select" onclick="bus_select()">DRIVERS</a></li>
-                </ul>
-            </div>
-            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-            <div data-role="footer">
-                <div data-role="controlgroup" data-type="horizontal">
-                    <a href="#" data-icon="arrow-l"  data-role="button" data-rel="back">Go Back</a>
-                </div>
-            </div>
-        </div>
-        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-        <div data-role="page" id="bus_select" data-theme="c">
-
-            <div data-role="header">
-                <h1>Bus App</h1>
-                <a href="#pageone" data-role="button" data-icon="" data-iconpos="right" class="ui-btn-left"><div class="caretaker_name">Hi </div></a>
-                <a href="#pageone" data-role="button" data-icon="arrow-u" data-iconpos="right" class="ui-btn-right"  onclick="logout()">Logout</a>
-            </div>
-            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - -->
-            <div role="main" class="ui-content">
-                <img src="resources/ash_logo.png" width='128' height="30" alt="" style='float: right'/>
-                <h1>Busses</h1>
-
-                <ul data-role="listview" data-inset="true" data-filter="true" id="busses">
-                    <li><a href="#passengers_select" onclick="passengers_select()">
-                            <img src='resources/2.jpg' alt=''>
-                            <h2>BUSSES</h2>
-                            <p>Bus 1</p>
-                        </a></li>
-                </ul>
-            </div>
-            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-            <div data-role="footer">
-                <div data-role="controlgroup" data-type="horizontal">
-                    <a href="#" data-icon="arrow-l"  data-role="button" data-rel="back">Go Back</a>
-                </div>
-            </div>
-        </div>
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
         <div data-role="page" id="passengers_select" data-theme="c">
 

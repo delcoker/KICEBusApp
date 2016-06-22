@@ -8,6 +8,9 @@ var bus_id = 0;
 var route_id = 0;
 var driver_id = 0;
 
+var settings_bus_id = 0;
+var settings_route_id = 0;
+var settings_driver_id = 0;
 
 var phonegap = "http://192.168.1.101/aomg/";
 
@@ -21,33 +24,127 @@ function login() {
 
 //    var res = syncAjaxGet(url, {conductor_id: conductor_id, password: password});
 //    dummy data
-    var res = {status: "success", role: "conductor", routes: [{"id": "1", "name": "ctk-aburi"}, {"id": "2", "name": "atomic-abom"}]};
+    var res = {status: "success", role: "conductor",
+        routes: [{"id": "1", "name": "ctk-aburi"}, {"id": "2", "name": "atomic-abom"}],
+        drivers: [{"id": "1", "name": "Peter Chek"}, {"id": "2", "name": "Esi Ansah"}],
+        busses: [{"id": "1", "name": "30 Seater Blue", "plate": "GT9344", "capacity": "30"},
+            {"id": "4", "name": "10 Seater White", "plate": "GHS44", "capacity": "10"},
+            {"id": "6", "name": "30 Seater Green", "plate": "ASH02", "capacity": "30"}],
+        default_settings: {route_id: 0, driver_id: 0, bus_id: 0, first_time: true}};
 
 //****************
+
     if (!(res.status === 'success')) {
 
         alert('Failed to login');
         return;
     }
-    var listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="routes">';
-    $.each(res.routes, function (key, value) {
-        listings += '<li><a href="#driver_select" onclick="driver_select(' + value.id + ')">';
-        listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
-        listings += "<h2>" + value.name + "</h2>";
-        listings += "<p>" + value.name + "</p>";
-        listings += '</a></li> ';
-    });
-    listings += '</ul>';
+    if (res.default_settings.first_time) {
+        // load routes
+        res.routes.sort(sort_by('name', false, function (a) {
+            return a.toUpperCase();
+        }));
 
-    $("#routes").replaceWith(listings);
+        var listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_route">';
+        $.each(res.routes, function (key, value) {
+            listings += '<li><a href="#route_save" onclick="route_save(' + value.id + ')">';
+            listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
+            listings += "<h2>" + value.name + "</h2>";
+            listings += "<p>" + value.name + "</p>";
+            listings += '</a></li> ';
+        });
+        listings += '</ul>';
 
-    $('#routes').listview().listview('refresh');
+        $("#settings_route").replaceWith(listings);
 
+        $('#settings_route').listview().listview('refresh');
 
-    window.open("index.html#route_select", "_self");
-//    $(document).on('pageinit', '#route_select', function () {
-//
-//    });
+        // load drivers
+
+        res.drivers.sort(sort_by('name', false, function (a) {
+            return a.toUpperCase();
+        }));
+
+        var listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_driver">';
+        $.each(res.drivers, function (key, value) {
+            listings += '<li><a href="#driver_save" onclick="driver_save(' + value.id + ')">';
+
+            listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
+            listings += "<h2>" + value.name + "</h2>";
+            listings += "<p>" + value.name + "</p>";
+            listings += '</a></li> ';
+        });
+        listings += '</ul>';
+
+        $("#settings_driver").replaceWith(listings);
+
+        $('#settings_driver').listview().listview('refresh');
+
+        // load busses
+
+        res.busses.sort(sort_by('name', false, function (a) {
+            return a.toUpperCase();
+        }));
+
+        var listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_bus">';
+        $.each(res.busses, function (key, value) {
+            listings += '<li><a href="#bus_save" onclick="bus_save(' + value.id + ')">';
+            listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
+            listings += "<h2>" + value.name + "</h2>";
+            listings += "<p>" + value.name + "</p>";
+            listings += '</a></li> ';
+        });
+
+        listings += '</ul>';
+
+        $("#settings_bus").replaceWith(listings);
+
+        $('#settings_bus').listview().listview('refresh');
+        window.open("index.html#settings_select", "_self");
+    }
+    else {
+        passengers_select();
+    }
+}
+
+function route_save(id) {
+    settings_route_id = id;
+}
+
+function driver_save(id) {
+    settings_driver_id = id;
+}
+
+function bus_save(id) {
+    settings_bus_id = id;
+}
+
+function settings_save() {
+    settings_route_id;
+    settings_driver_id;
+    settings_bus_id;
+
+    if (settings_bus_id === 0) {
+        alert("What bus will pass this route?");
+        return;
+    }
+    else if (settings_driver_id === 0) {
+        alert("There must be a driver for that bus");
+        return;
+    }
+    if (settings_route_id === 0) {
+        alert("Select a route.");
+        return;
+    }
+
+    //    var res = syncAjaxGet(url, {conductor_id: conductor_id, password: password});
+
+    var res = {status: "success"};
+    if (!(res.status === "success")) {
+        alert("Your settings could not be saved. Try at a later time");
+    }
+
+    passengers_select();
 }
 
 function driver_select(id) {
@@ -130,8 +227,7 @@ function bus_select(id) {
 
 }
 
-function passengers_select(id) {
-    bus_id = id;
+function passengers_select() {
     var url = phonegap + "passensgers";
     //    var res = syncAjaxGet(url, {conductor_id: conductor_id, password: password});
 //  ***************  dummy data
@@ -140,7 +236,8 @@ function passengers_select(id) {
             {"id": "4", "name": "Iddris Alba", "role": "passenger", "amount_left": "2.50"},
             {"id": "5", "name": "Jessica Alba", "role": "passenger", "amount_left": "99.50"},
             {"id": "8", "name": "Zul Kyei", "role": "passenger", "amount_left": "100.50"},
-            {"id": "10", "name": "King Coker", "role": "passenger", "amount_left": "4430.50"}]};
+            {"id": "10", "name": "King Coker", "role": "passenger", "amount_left": "4430.50"}],
+        default_settings: {route_id: 1, driver_id: 2, bus_id: 3, first_time: false}};
 
 //****************
 
@@ -155,35 +252,20 @@ function passengers_select(id) {
     }
     var listings = '<fieldset data-role="controlgroup" id="passengers" data-filter="true" data-icon="false">';
     $.each(res.passengers, function (key, value) {
-
-
         listings += '<input type="checkbox" class="passengers_checkbox" name="passengers_checkbox" id="' + value.id + '"/>';
         listings += '<label for="' + value.id + '">';
         listings += '<span style="display: inline-block;" >';
-
-        listings += "<div ><span><img src='" + 'resources/2.jpg' + "' alt='' width='40' height='40'>";
+        listings += "<span><img src='" + 'resources/2.jpg' + "' alt='' width='40' height='40'>";
         listings += "<span style='float:right; margin-left:10px'><div> " + value.name + "<br>";
-        listings += " " + value.amount_left + "</div> </span> </span>  ";
-
-        listings += "</div>";
-        listings += "</div>";
+        listings += "" + value.amount_left + "</div> </span> </span>  ";
         listings += "</span>";
-
-//        listings += "<span>";
-//        listings += "<input type='number' id='sth'  placeholder='amount' step='0.01'  style='float:left;display:inline'>";
-//        listings += '<label for="' + "sth" + '">';
-//        listings += "</span>";
-
         listings += '</label>';
     });
     listings += '</fieldset>';
 
     $("#passengers").replaceWith(listings);
-
-    $('#passengers').listview().listview('refresh');
-
+    $('#passengers').controlgroup().controlgroup('refresh');
     window.open("index.html#passengers_select", "_self");
-
 }
 
 function payment_amount() {
