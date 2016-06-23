@@ -22,7 +22,7 @@ function login() {
 
     var url = phonegap + "login";
 
-    var res = syncAjaxPost()(url, {username: username, password: password});
+//    var res = syncAjaxPost()(url, {username: username, password: password});
 //    dummy data
     var res = {status: "success", role: "conductor",
         routes: [{"route_id": "1", "name": "ctk-aburi"}, {"route_id": "2", "name": "atomic-abom"}],
