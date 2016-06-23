@@ -22,7 +22,7 @@ function login() {
 
     var url = phonegap + "login";
 
-    var res = syncAjaxGet(url, {username: username, password: password});
+    var res = syncAjaxPost()(url, {username: username, password: password});
 //    dummy data
     var res = {status: "success", role: "conductor",
         routes: [{"route_id": "1", "name": "ctk-aburi"}, {"route_id": "2", "name": "atomic-abom"}],
@@ -47,7 +47,7 @@ function login() {
 
         var listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_route">';
         $.each(res.routes, function (key, value) {
-            listings += '<li><a href="#route_save" onclick="route_save(' + value.id + ')">';
+            listings += '<li><a href="#route_save" onclick="route_save(' + value.route_id + ')">';
             listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
             listings += "<h2>" + value.name + "</h2>";
             listings += "<p>" + value.name + "</p>";
@@ -67,7 +67,7 @@ function login() {
 
         var listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_driver">';
         $.each(res.drivers, function (key, value) {
-            listings += '<li><a href="#driver_save" onclick="driver_save(' + value.id + ')">';
+            listings += '<li><a href="#driver_save" onclick="driver_save(' + value.driver_id + ')">';
 
             listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
             listings += "<h2>" + value.name + "</h2>";
@@ -88,7 +88,7 @@ function login() {
 
         var listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_bus">';
         $.each(res.busses, function (key, value) {
-            listings += '<li><a href="#bus_save" onclick="bus_save(' + value.id + ')">';
+            listings += '<li><a href="#bus_save" onclick="bus_save(' + value.bus_id + ')">';
             listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
             listings += "<h2>" + value.name + "</h2>";
             listings += "<p>" + value.name + "</p>";
@@ -228,15 +228,15 @@ function bus_select(id) {
 }
 
 function passengers_select() {
-    var url = phonegap + "passensgers";
+    var url = phonegap + "passengers";
     //    var res = syncAjaxGet(url, {conductor_id: conductor_id, password: password});
 //  ***************  dummy data
-    var res = {status: "success", passengers: [{"id": "1", "name": "Joseph Nti", "role": "passenger", "amount_left": "200.50"},
-            {"id": "2", "name": "Esi Yenuah", "role": "passenger", "amount_left": "323.50"},
-            {"id": "4", "name": "Iddris Alba", "role": "passenger", "amount_left": "2.50"},
-            {"id": "5", "name": "Jessica Alba", "role": "passenger", "amount_left": "99.50"},
-            {"id": "8", "name": "Zul Kyei", "role": "passenger", "amount_left": "100.50"},
-            {"id": "10", "name": "King Coker", "role": "passenger", "amount_left": "4430.50"}],
+    var res = {status: "success", passengers: [{"occupant_id": "1", "name": "Joseph Nti", "role": "passenger", "amount_left": "200.50"},
+            {"occupant_id": "2", "name": "Esi Yenuah", "role": "passenger", "amount_left": "323.50"},
+            {"occupant_id": "4", "name": "Iddris Alba", "role": "passenger", "amount_left": "2.50"},
+            {"occupant_id": "5", "name": "Jessica Alba", "role": "passenger", "amount_left": "99.50"},
+            {"occupant_id": "8", "name": "Zul Kyei", "role": "passenger", "amount_left": "100.50"},
+            {"occupant_id": "10", "name": "King Coker", "role": "passenger", "amount_left": "4430.50"}],
         default_settings: {route_id: 1, driver_id: 2, bus_id: 3, first_time: false}};
 
 //****************
@@ -252,8 +252,8 @@ function passengers_select() {
     }
     var listings = '<fieldset data-role="controlgroup" id="passengers" data-filter="true" data-icon="false">';
     $.each(res.passengers, function (key, value) {
-        listings += '<input type="checkbox" class="passengers_checkbox" name="passengers_checkbox" id="' + value.id + '"/>';
-        listings += '<label for="' + value.id + '">';
+        listings += '<input type="checkbox" class="passengers_checkbox" name="passengers_checkbox" id="' + value.conductor_id + '"/>';
+        listings += '<label for="' + value.conductor_id + '">';
         listings += '<span style="display: inline-block;" >';
         listings += "<span><img src='" + 'resources/2.jpg' + "' alt='' width='40' height='40'>";
         listings += "<span style='float:right; margin-left:10px'><div> " + value.name + "<br>";
