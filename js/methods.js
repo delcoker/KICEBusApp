@@ -17,19 +17,19 @@ var phonegap = "http://192.168.1.101/aomg/";
 
 
 function login() {
-    var conductor_id = $("#conductor_id").val();
+    var username = $("#username").val();
     var password = $("#password").val();
 
     var url = phonegap + "login";
 
-//    var res = syncAjaxGet(url, {conductor_id: conductor_id, password: password});
+    var res = syncAjaxGet(url, {username: username, password: password});
 //    dummy data
     var res = {status: "success", role: "conductor",
-        routes: [{"id": "1", "name": "ctk-aburi"}, {"id": "2", "name": "atomic-abom"}],
-        drivers: [{"id": "1", "name": "Peter Chek"}, {"id": "2", "name": "Esi Ansah"}],
-        busses: [{"id": "1", "name": "30 Seater Blue", "plate": "GT9344", "capacity": "30"},
-            {"id": "4", "name": "10 Seater White", "plate": "GHS44", "capacity": "10"},
-            {"id": "6", "name": "30 Seater Green", "plate": "ASH02", "capacity": "30"}],
+        routes: [{"route_id": "1", "name": "ctk-aburi"}, {"route_id": "2", "name": "atomic-abom"}],
+        drivers: [{"driver_id": "1", "name": "Peter Chek"}, {"driver_id": "2", "name": "Esi Ansah"}],
+        busses: [{"bus_id": "1", "name": "30 Seater Blue", "plate": "GT9344", "capacity": "30"},
+            {"bus_id": "4", "name": "10 Seater White", "plate": "GHS44", "capacity": "10"},
+            {"bus_id": "6", "name": "30 Seater Green", "plate": "ASH02", "capacity": "30"}],
         default_settings: {route_id: 0, driver_id: 0, bus_id: 0, first_time: true}};
 
 //****************
