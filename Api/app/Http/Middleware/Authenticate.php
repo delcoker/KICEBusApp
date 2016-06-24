@@ -21,7 +21,8 @@ class Authenticate
             if ($request->ajax() || $request->wantsJson()) {
                 return response('Unauthorized.', 401);
             } else {
-                return '{"status":"Unauthorized","message":"Please login in First"}';
+                return response()->json(['status' => 'Unauthorized', 'message' => 'Please login in First']);
+               
             }
         }
 
