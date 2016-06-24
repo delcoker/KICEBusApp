@@ -12,7 +12,7 @@ var settings_bus_id = 0;
 var settings_route_id = 0;
 var settings_driver_id = 0;
 
-var phonegap = "http://192.168.1.101/aomg/";
+var phonegap = "http://10.10.26.106/KICEBusApp/Api/public/";
 
 
 
@@ -22,15 +22,15 @@ function login() {
 
     var url = phonegap + "login";
 
-//    var res = syncAjaxPost()(url, {username: username, password: password});
+    var res = syncAjaxPost(url, {username: username, password: password});
 //    dummy data
-    var res = {status: "success", role: "conductor",
-        routes: [{"route_id": "1", "name": "ctk-aburi"}, {"route_id": "2", "name": "atomic-abom"}],
-        drivers: [{"driver_id": "1", "name": "Peter Chek"}, {"driver_id": "2", "name": "Esi Ansah"}],
-        busses: [{"bus_id": "1", "name": "30 Seater Blue", "plate": "GT9344", "capacity": "30"},
-            {"bus_id": "4", "name": "10 Seater White", "plate": "GHS44", "capacity": "10"},
-            {"bus_id": "6", "name": "30 Seater Green", "plate": "ASH02", "capacity": "30"}],
-        default_settings: {route_id: 0, driver_id: 0, bus_id: 0, first_time: true}};
+//    var res = {status: "success", role: "conductor",
+//        routes: [{"route_id": "1", "name": "ctk-aburi"}, {"route_id": "2", "name": "atomic-abom"}],
+//        drivers: [{"driver_id": "1", "name": "Peter Chek"}, {"driver_id": "2", "name": "Esi Ansah"}],
+//        busses: [{"bus_id": "1", "name": "30 Seater Blue", "plate": "GT9344", "capacity": "30"},
+//            {"bus_id": "4", "name": "10 Seater White", "plate": "GHS44", "capacity": "10"},
+//            {"bus_id": "6", "name": "30 Seater Green", "plate": "ASH02", "capacity": "30"}],
+//        default_settings: {route_id: 0, driver_id: 0, bus_id: 0, first_time: true}};
 
 //****************
 
@@ -252,8 +252,8 @@ function passengers_select() {
     }
     var listings = '<fieldset data-role="controlgroup" id="passengers" data-filter="true" data-icon="false">';
     $.each(res.passengers, function (key, value) {
-        listings += '<input type="checkbox" class="passengers_checkbox" name="passengers_checkbox" id="' + value.conductor_id + '"/>';
-        listings += '<label for="' + value.conductor_id + '">';
+        listings += '<input type="checkbox" class="passengers_checkbox" name="passengers_checkbox" id="' + value.occupant_id + '"/>';
+        listings += '<label for="' + value.occupant_id + '">';
         listings += '<span style="display: inline-block;" >';
         listings += "<span><img src='" + 'resources/2.jpg' + "' alt='' width='40' height='40'>";
         listings += "<span style='float:right; margin-left:10px'><div> " + value.name + "<br>";
