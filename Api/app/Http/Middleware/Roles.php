@@ -17,8 +17,10 @@ class Roles
     public function handle($request, Closure $next)
     {
         $user = Auth::user();
-        if ($user->role !='admin') {
-           '{"status":"Unauthorized","message":"You do not havethe permission to view this page"}' ;
+        if ($user->role !='conductor') {
+            return response()
+                ->json(['status' => 'Unauthorized', 'message' => 'You do not have the permission to view this page']);
+          
         }
 
         return $next($request);
