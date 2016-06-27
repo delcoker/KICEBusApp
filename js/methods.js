@@ -12,7 +12,8 @@ var settings_bus_id = 0;
 var settings_route_id = 0;
 var settings_driver_id = 0;
 
-var phonegap = "http://192.168.1.101/aomg/";
+var phonegap = "http://10.10.50.37/Ashesibusapp/Api/public/";
+
 
 
 
