@@ -35,8 +35,8 @@ public function postLogin(){
 		if($validator->passes()){
 
 			$user = User::where('username','=',$data['username'])->first();
-
-			if($user->password==$data['password']){
+			//dd($user);
+			if($user && $user->password==$data['password']){
 				
 				Auth::login($user);
 				$authenticatedUser = Auth::user();
@@ -50,6 +50,7 @@ public function postLogin(){
 						$drivers = Drivers::all();
 						$buses = Buses::all();
 						$res_json = '{"status":"success","role":"'.$authenticatedUser->role.
+									'","username":"'.$authenticatedUser->username.
 									'","defaultsettings":'.json_encode($defaultsettings).
 									',"routes":'.json_encode($routes).
 									',"drivers":'.json_encode($drivers).
@@ -57,6 +58,16 @@ public function postLogin(){
 									'}';
 
 
+
+					}
+					elseif ($defaultsettings->first_time == 0) {
+						# code...
+						$defaultsettings = DefaultSettings::where('occupant_id','=',$authenticatedUser->id)->first();
+
+						$res_json='{"status":"success","role":"'.$authenticatedUser->role.
+								  '","username":'.$authenticatedUser->username.
+								  '","defaultsettings":'.json_encode($defaultsettings).
+								  '}';
 
 					}
 
