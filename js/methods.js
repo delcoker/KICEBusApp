@@ -12,7 +12,7 @@ var settings_bus_id = 0;
 var settings_route_id = 0;
 var settings_driver_id = 0;
 
-var phonegap = "http://192.168.1.101/aomg/";
+var phonegap = "http://http://10.10.26.106/KICEBusApp/Api/public/";
 
 
 
@@ -22,15 +22,15 @@ function login() {
 
     var url = phonegap + "login";
 
-//    var res = syncAjaxPost()(url, {username: username, password: password});
+    var res = syncAjaxPost(url, {username: username, password: password});
 //    dummy data
-    var res = {status: "success", role: "conductor",
-        routes: [{"route_id": "1", "name": "ctk-aburi"}, {"route_id": "2", "name": "atomic-abom"}],
-        drivers: [{"driver_id": "1", "name": "Peter Chek"}, {"driver_id": "2", "name": "Esi Ansah"}],
-        busses: [{"bus_id": "1", "name": "30 Seater Blue", "plate": "GT9344", "capacity": "30"},
-            {"bus_id": "4", "name": "10 Seater White", "plate": "GHS44", "capacity": "10"},
-            {"bus_id": "6", "name": "30 Seater Green", "plate": "ASH02", "capacity": "30"}],
-        default_settings: {route_id: 0, driver_id: 0, bus_id: 0, first_time: true}};
+//    var res = {status: "success", role: "conductor",
+//        routes: [{"route_id": "1", "name": "ctk-aburi"}, {"route_id": "2", "name": "atomic-abom"}],
+//        drivers: [{"driver_id": "1", "name": "Peter Chek"}, {"driver_id": "2", "name": "Esi Ansah"}],
+//        busses: [{"bus_id": "1", "name": "30 Seater Blue", "plate": "GT9344", "capacity": "30"},
+//            {"bus_id": "4", "name": "10 Seater White", "plate": "GHS44", "capacity": "10"},
+//            {"bus_id": "6", "name": "30 Seater Green", "plate": "ASH02", "capacity": "30"}],
+//        default_settings: {route_id: 0, driver_id: 0, bus_id: 0, first_time: true}};
 
 //****************
 
@@ -365,6 +365,7 @@ function syncAjaxPost(u, arr) {
 //    alert(arr[0]);
     var obj = $.ajax(u, {async: false
         , type: 'POST'
+        , crossDomain: true
         , data: arr // {cmd:3} //JSON.stringify(arr)     //  {cmd:3}// ?cmd=3
 //        , dataType: String
         , success: callAjaxSuccessful   //            function(data){alert(data);}
