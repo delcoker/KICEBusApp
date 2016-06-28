@@ -15,6 +15,7 @@ use App\DefaultSettings;
 use App\Routes;
 use App\Buses;
 use App\Drivers;
+use Carbon\Carbon;
 
 class UsersController extends Controller{
     //
@@ -75,14 +76,23 @@ public function postLogin(){
 
     						//dd($settings);
 
-						$now = new DateTime(); //current date/time
-						$startTime = date_time_set($now,06,00,00);
-						$endTime = date_time_set($now,18,00,00);
+						$startTime = Carbon::now();
+						$startTime->hour = 5;
+						$startTime->minute = 00;
+						$startTime->second = 00;
+						
+						
+						$endTime = Carbon::now();
+						$endTime->hour = 9;
+						$endTime->minute = 00;
+						$endTime->second = 00;
 						
 						//get list of unpaid users
             			$unpaidOccupants = User::join('transactions','transactions.occupation_id','=','occupants.id')
             									->whereNotBetween('transactions.created_at', array($startTime, $endTime))
-            									->select('occupants.name','occupants.balance')
+            									->orWhere('transactions.transaction_id', "=",null)
+            									->select('occupants.id','occupants.name','occupants.balance')
+            									->distinct()
             									->get();
 
 						
@@ -125,16 +135,24 @@ public function postLogin(){
 	public function saveSettings(){
 		$user =Auth::user();
 		$data = Input::get();
-		$now = new DateTime(); //current date/time
-		$startTime = date_time_set($now,06,00,00);
-		$endTime = date_time_set($now,18,00,00);
+		$startTime = Carbon::now();
+		$startTime->hour = 5;
+		$startTime->minute = 00;
+		$startTime->second = 00;
+		
+		
+		$endTime = Carbon::now();
+		$endTime->hour = 9;
+		$endTime->minute = 00;
+		$endTime->second = 00;
+
 		$routes = Routes::all();
 		$drivers = Drivers::all();
 		$buses = Buses::all();
-		
+
 		//dd($data);
 		$settings = DefaultSettings::where('occupant_id','=',$user->id)->first();
-		//dd($settings[0]->bus_id);
+		//dd($settings);
 		
 		$settings->bus_id = $data['bus_id'];
 		$settings->driver_id = $data['driver_id'];
@@ -148,9 +166,12 @@ public function postLogin(){
             						->select('drivers.driver_id','drivers.name as driverName', 'routes.route_id','routes.name as routeName','busses.bus_id','busses.name as busName')
             						->get();
 
-			$unpaidOccupants = User::join('transactions','transactions.occupation_id','=','occupants.id')
+			$unpaidOccupants = User::leftjoin('transactions','transactions.occupation_id','=','occupants.id')
+
             									->whereNotBetween('transactions.created_at', array($startTime, $endTime))
-            									->select('occupants.name','occupants.balance')
+            									->orWhere('transactions.transaction_id', "=",null)
+            									->select('occupants.id','occupants.name','occupants.balance')
+            									->distinct()
             									->get();
 
 			$res_json='{"status":"success","role":"'.$user->role.
