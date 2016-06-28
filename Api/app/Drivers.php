@@ -9,4 +9,5 @@ class Drivers extends Model
     //
 
      protected $table = 'drivers';
+     protected $primaryKey = 'driver_id';
 }
