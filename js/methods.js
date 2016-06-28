@@ -15,8 +15,6 @@ var settings_driver_id = 0;
 var phonegap = "http://10.10.50.37/AshesiBusApp/Api/public/";
 
 
-
-
 function login() {
     var username = $("#username").val();
     var password = $("#password").val();

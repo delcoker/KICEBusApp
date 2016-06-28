@@ -120,17 +120,16 @@ class UsersController extends Controller {
         $drivers = Drivers::all();
         $buses = Buses::all();
 
-//        dd($user);
+        //dd($data);
         $settings = DefaultSettings::where('occupant_id', '=', $user->id)->first();
+        //dd($settings[0]->bus_id);
+
         $settings->bus_id = $data['bus_id'];
         $settings->driver_id = $data['driver_id'];
         $settings->route_id = $data['route_id'];
         $settings->first_time = 0;
 
-
-
         if ($settings->save()) {
-//            dd($settings);
             $settings = $settings::join('busses', 'busses.bus_id', '=', 'defaultsettings.bus_id')
                     ->join('drivers', 'drivers.driver_id', '=', 'defaultsettings.driver_id')
                     ->join('routes', 'routes.route_id', '=', 'defaultsettings.route_id')
