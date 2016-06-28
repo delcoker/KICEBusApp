@@ -133,8 +133,8 @@ public function postLogin(){
 		$buses = Buses::all();
 		
 		//dd($data);
-		$settings = DefaultSettings::where('occupant_id','=',$user->id)->get();
-		dd($settings[0]->bus_id);
+		$settings = DefaultSettings::where('occupant_id','=',$user->id)->first();
+		//dd($settings[0]->bus_id);
 		
 		$settings->bus_id = $data['bus_id'];
 		$settings->driver_id = $data['driver_id'];
