@@ -12,34 +12,35 @@ var settings_bus_id = 0;
 var settings_route_id = 0;
 var settings_driver_id = 0;
 
-var phonegap = "http://192.168.1.101/aomg/";
+var phonegap = "http://10.10.50.37/AshesiBusApp/Api/public/";
+
 
 
 
 function login() {
-    var conductor_id = $("#conductor_id").val();
+    var username = $("#username").val();
     var password = $("#password").val();
 
     var url = phonegap + "login";
 
-//    var res = syncAjaxGet(url, {conductor_id: conductor_id, password: password});
+    var res = syncAjaxPost(url, {username: username, password: password});
 //    dummy data
-    var res = {status: "success", role: "conductor",
-        routes: [{"id": "1", "name": "ctk-aburi"}, {"id": "2", "name": "atomic-abom"}],
-        drivers: [{"id": "1", "name": "Peter Chek"}, {"id": "2", "name": "Esi Ansah"}],
-        busses: [{"id": "1", "name": "30 Seater Blue", "plate": "GT9344", "capacity": "30"},
-            {"id": "4", "name": "10 Seater White", "plate": "GHS44", "capacity": "10"},
-            {"id": "6", "name": "30 Seater Green", "plate": "ASH02", "capacity": "30"}],
-        default_settings: {route_id: 0, driver_id: 0, bus_id: 0, first_time: true}};
+//    var res = {status: "success", role: "conductor",
+//        routes: [{"id": "1", "name": "ctk-aburi"}, {"id": "2", "name": "atomic-abom"}],
+//        drivers: [{"id": "1", "name": "Peter Chek"}, {"id": "2", "name": "Esi Ansah"}],
+//        busses: [{"id": "1", "name": "30 Seater Blue", "plate": "GT9344", "capacity": "30"},
+//            {"id": "4", "name": "10 Seater White", "plate": "GHS44", "capacity": "10"},
+//            {"id": "6", "name": "30 Seater Green", "plate": "ASH02", "capacity": "30"}],
+//        default_settings: {route_id: 0, driver_id: 0, bus_id: 0, first_time: true}};
 
 //****************
 
     if (!(res.status === 'success')) {
 
-        alert('Failed to login');
+        alert(res.message);
         return;
     }
-    if (res.default_settings.first_time) {
+    if (res.defaultSettings.first_time) {
         // load routes
         res.routes.sort(sort_by('name', false, function (a) {
             return a.toUpperCase();
@@ -47,7 +48,7 @@ function login() {
 
         var listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_route">';
         $.each(res.routes, function (key, value) {
-            listings += '<li><a href="#route_save" onclick="route_save(' + value.id + ')">';
+            listings += '<li><a href="#route_save" onclick="route_save(' + value.route_id + ')">';
             listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
             listings += "<h2>" + value.name + "</h2>";
             listings += "<p>" + value.name + "</p>";
@@ -67,7 +68,7 @@ function login() {
 
         var listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_driver">';
         $.each(res.drivers, function (key, value) {
-            listings += '<li><a href="#driver_save" onclick="driver_save(' + value.id + ')">';
+            listings += '<li><a href="#driver_save" onclick="driver_save(' + value.driver_id + ')">';
 
             listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
             listings += "<h2>" + value.name + "</h2>";
@@ -82,13 +83,13 @@ function login() {
 
         // load busses
 
-        res.busses.sort(sort_by('name', false, function (a) {
+        res.buses.sort(sort_by('name', false, function (a) {
             return a.toUpperCase();
         }));
 
         var listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_bus">';
-        $.each(res.busses, function (key, value) {
-            listings += '<li><a href="#bus_save" onclick="bus_save(' + value.id + ')">';
+        $.each(res.buses, function (key, value) {
+            listings += '<li><a href="#bus_save" onclick="bus_save(' + value.bus_id + ')">';
             listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
             listings += "<h2>" + value.name + "</h2>";
             listings += "<p>" + value.name + "</p>";
@@ -120,9 +121,10 @@ function bus_save(id) {
 }
 
 function settings_save() {
-    settings_route_id;
-    settings_driver_id;
-    settings_bus_id;
+
+//    settings_route_id;
+//    settings_driver_id;
+//    settings_bus_id;
 
     if (settings_bus_id === 0) {
         alert("What bus will pass this route?");
@@ -137,7 +139,10 @@ function settings_save() {
         return;
     }
 
-    //    var res = syncAjaxGet(url, {conductor_id: conductor_id, password: password});
+    var url = "settings";
+    var res = syncAjaxGet(phonegap + url, {route_id: settings_route_id,
+        driver_id: settings_driver_id,
+        bus_id: settings_bus_id});
 
     var res = {status: "success"};
     if (!(res.status === "success")) {
