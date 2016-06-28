@@ -84,7 +84,7 @@ class UsersController extends Controller {
                         $endTime->second = 00;
 
 //get list of unpaid users
-                        $unpaidOccupants = User::join('transactions', 'transactions.occupation_id', '=', 'occupants.id')
+                        $unpaidOccupants = User::leftjoin('transactions', 'transactions.occupation_id', '=', 'occupants.id')
                                 ->whereNotBetween('transactions.created_at', array($startTime, $endTime))
                                 ->orWhere('transactions.transaction_id', "=", null)
                                 ->select('occupants.id', 'occupants.name', 'occupants.balance')

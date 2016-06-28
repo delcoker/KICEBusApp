@@ -12,6 +12,11 @@ var settings_bus_id = 0;
 var settings_route_id = 0;
 var settings_driver_id = 0;
 
+var all_routes = {};
+var all_busses = {};
+var all_drivers = {};
+
+
 var phonegap = "http://10.10.50.37/AshesiBusApp/Api/public/";
 
 
@@ -43,6 +48,7 @@ function login() {
         res.routes.sort(sort_by('name', false, function (a) {
             return a.toUpperCase();
         }));
+        all_routes = res.routes;
 
         var listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_route">';
         $.each(res.routes, function (key, value) {
@@ -59,6 +65,8 @@ function login() {
         $('#settings_route').listview().listview('refresh');
 
         // load drivers
+
+        all_drivers = res.drivers;
 
         res.drivers.sort(sort_by('name', false, function (a) {
             return a.toUpperCase();
@@ -84,6 +92,7 @@ function login() {
         res.buses.sort(sort_by('name', false, function (a) {
             return a.toUpperCase();
         }));
+        all_busses = res.buses;
 
         var listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_bus">';
         $.each(res.buses, function (key, value) {
@@ -102,20 +111,45 @@ function login() {
         window.open("index.html#settings_select", "_self");
     }
     else {
-        passengers_select();
+        passengers_select(res);
     }
 }
 
 function route_save(id) {
+
     settings_route_id = id;
+    var curr = "";
+    $.each(all_routes, function (key, value) {
+        if (value.route_id === id) {
+            curr = value.name;
+        }
+//        curr = value.route_id === id ? value.name : "";
+    });
+    $('#selected_route').text("Current Route: " + curr);
 }
 
 function driver_save(id) {
     settings_driver_id = id;
+    var curr = "";
+    $.each(all_drivers, function (key, value) {
+        if (value.driver_id === id) {
+            curr = value.name;
+        }
+//        curr = value.driver_id === id ? value.name : "";
+    });
+    $('#selected_driver').text("Current Driver: " + curr);
 }
 
 function bus_save(id) {
     settings_bus_id = id;
+    var curr = "";
+    $.each(all_busses, function (key, value) {
+        if (value.bus_id === id) {
+            curr = value.name;
+        }
+//        curr = value.bus_id === id ? value.name : '';
+    });
+    $('#selected_bus').text("Current Bus: " + curr);
 }
 
 function settings_save() {
@@ -137,17 +171,18 @@ function settings_save() {
         return;
     }
 
-    var url = "settings";
-    var res = syncAjaxGet(phonegap + url, {route_id: settings_route_id,
+    var url = phonegap + "settings";
+
+    var res = syncAjaxPost(url, {route_id: settings_route_id,
         driver_id: settings_driver_id,
         bus_id: settings_bus_id});
 
-    var res = {status: "success"};
+//    var res = {status: "success"};
     if (!(res.status === "success")) {
         alert("Your settings could not be saved. Try at a later time");
     }
 
-    passengers_select();
+    passengers_select(res);
 }
 
 function driver_select(id) {
@@ -230,21 +265,21 @@ function bus_select(id) {
 
 }
 
-function passengers_select() {
-    var url = phonegap + "passensgers";
+function passengers_select(res) {
+//    var url = phonegap + "passensgers";
     //    var res = syncAjaxGet(url, {conductor_id: conductor_id, password: password});
 //  ***************  dummy data
-    var res = {status: "success", passengers: [{"id": "1", "name": "Joseph Nti", "role": "passenger", "amount_left": "200.50"},
-            {"id": "2", "name": "Esi Yenuah", "role": "passenger", "amount_left": "323.50"},
-            {"id": "4", "name": "Iddris Alba", "role": "passenger", "amount_left": "2.50"},
-            {"id": "5", "name": "Jessica Alba", "role": "passenger", "amount_left": "99.50"},
-            {"id": "8", "name": "Zul Kyei", "role": "passenger", "amount_left": "100.50"},
-            {"id": "10", "name": "King Coker", "role": "passenger", "amount_left": "4430.50"}],
-        default_settings: {route_id: 1, driver_id: 2, bus_id: 3, first_time: false}};
+//    var res = {status: "success", passengers: [{"id": "1", "name": "Joseph Nti", "role": "passenger", "amount_left": "200.50"},
+//            {"id": "2", "name": "Esi Yenuah", "role": "passenger", "amount_left": "323.50"},
+//            {"id": "4", "name": "Iddris Alba", "role": "passenger", "amount_left": "2.50"},
+//            {"id": "5", "name": "Jessica Alba", "role": "passenger", "amount_left": "99.50"},
+//            {"id": "8", "name": "Zul Kyei", "role": "passenger", "amount_left": "100.50"},
+//            {"id": "10", "name": "King Coker", "role": "passenger", "amount_left": "4430.50"}],
+//        default_settings: {route_id: 1, driver_id: 2, bus_id: 3, first_time: false}};
 
 //****************
 
-    res.passengers.sort(sort_by('name', false, function (a) {
+    res.unpaidCustomers.sort(sort_by('name', 0, function (a) {
         return a.toUpperCase();
     }));
 
@@ -254,13 +289,13 @@ function passengers_select() {
         return;
     }
     var listings = '<fieldset data-role="controlgroup" id="passengers" data-filter="true" data-icon="false">';
-    $.each(res.passengers, function (key, value) {
+    $.each(res.unpaidCustomers, function (key, value) {
         listings += '<input type="checkbox" class="passengers_checkbox" name="passengers_checkbox" id="' + value.id + '"/>';
         listings += '<label for="' + value.id + '">';
         listings += '<span style="display: inline-block;" >';
         listings += "<span><img src='" + 'resources/2.jpg' + "' alt='' width='40' height='40'>";
         listings += "<span style='float:right; margin-left:10px'><div> " + value.name + "<br>";
-        listings += "" + value.amount_left + "</div> </span> </span>  ";
+        listings += "" + value.balance + "</div> </span> </span>  ";
         listings += "</span>";
         listings += '</label>';
     });
