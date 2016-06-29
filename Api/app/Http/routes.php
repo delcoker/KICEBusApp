@@ -14,3 +14,16 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::auth();
+
+Route::post('/login', 'UsersController@postLogin');
+
+$router->group(['middleware' => 'auth'], function() {
+    
+
+	 // Only authenticated users may enter...
+
+	Route::get('logout', array('as'=>'logout','uses'=>'UsersController@logout'));
+	Route::post('settings', array('as'=>'settings','middleware' => 'role','uses'=>'UsersController@saveSettings'));
+});
