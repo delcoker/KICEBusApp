@@ -18,6 +18,7 @@ class CreateBuslocationsTable extends Migration
 			$table->string('longitude')->default('');
 			$table->string('latitude')->default('');
 			$table->integer('route_id');
+			$table->integer('bus_id');
             $table->timestamps();
         });
     }

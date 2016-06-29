@@ -19,6 +19,8 @@ Route::auth();
 
 Route::post('/login', 'UsersController@postLogin');
 
+Route::get('/unpaidUsers','TransactionController@unpaidUsers');
+
 $router->group(['middleware' => 'auth'], function() {
     
 
