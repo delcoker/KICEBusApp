@@ -72,7 +72,7 @@ public function postLogin(){
             						->join('drivers', 'drivers.driver_id', '=', 'defaultsettings.driver_id')
             						->join('routes', 'routes.route_id', '=', 'defaultsettings.route_id')
             						->select('drivers.driver_id','drivers.name as driverName', 'routes.route_id','routes.name as routeName','busses.bus_id','busses.name as busName')
-            						->get();
+            						->first();
 
     						//dd($settings);
 
@@ -152,7 +152,7 @@ public function postLogin(){
 
 		//dd($data);
 		$settings = DefaultSettings::where('occupant_id','=',$user->id)->first();
-		//dd($settings);
+		//dd($settings[0]->bus_id);
 		
 		$settings->bus_id = $data['bus_id'];
 		$settings->driver_id = $data['driver_id'];
@@ -172,7 +172,7 @@ public function postLogin(){
             									->orWhere('transactions.transaction_id', "=",null)
             									->select('occupants.id','occupants.name','occupants.balance')
             									->distinct()
-            									->get();
+            									->first();
 
 			$res_json='{"status":"success","role":"'.$user->role.
 								  '","username":"'.$user->username.
