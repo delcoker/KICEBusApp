@@ -16,11 +16,21 @@ var all_routes = {};
 var all_busses = {};
 var all_drivers = {};
 
+var curLong = 0;
+var curLat = 0;
 
-var phonegap = "http://10.10.50.37/AshesiBusApp/Api/public/";
+var phonegap = "https://10.10.50.37/AshesiBusApp/Api/public/";
+//var phonegap = "http://localhost/AshesiBusApp/Api/public/";
 
+
+$(document).ready(function () {
+    window.setInterval(function () {
+        sendBusXY();
+    }, 30000);
+});
 
 function login() {
+
     var username = $("#username").val();
     var password = $("#password").val();
 
@@ -114,6 +124,67 @@ function login() {
         passengers_select(res);
     }
 }
+
+function sendBusXY() {
+    var Geo = {};
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(success, error);
+    }
+
+    //Get the latitude and the longitude;
+    function success(position) {
+        Geo.lat = position.coords.latitude;
+        Geo.lng = position.coords.longitude;
+        populateHeader(Geo.lat, Geo.lng);
+    }
+
+    function error() {
+        console.log("Geocoder failed");
+    }
+
+    function populateHeader(lat, lng) {
+        curLong = lng;
+        curLat = lat;
+        $('.Lat').html(lat);
+        $('.Long').html(lng);
+    }
+
+
+}
+
+$(document).on("pageshow", "#map-page", function () {
+    sendBusXY();
+    var defaultLatLng = new google.maps.LatLng(34.0983425, -118.3267434);  // Default to Hollywood, CA when no geolocation support
+    if (navigator.geolocation) {
+        function success(pos) {
+            // Location found, show map with these coordinates
+            drawMap(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
+        }
+        function fail(error) {
+            drawMap(defaultLatLng);  // Failed to find location, show default map
+        }
+        // Find the users current position.  Cache the location for 5 minutes, timeout after 6 seconds
+        navigator.geolocation.getCurrentPosition(success, fail, {maximumAge: 500000, enableHighAccuracy: true, timeout: 6000});
+    } else {
+        drawMap(defaultLatLng);  // No geolocation support, show default map
+    }
+    function drawMap(latlng) {
+        var myOptions = {
+            zoom: 10,
+            center: latlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+        // Add an overlay to the map of current lat/lng
+        var marker = new google.maps.Marker({
+            position: latlng,
+            map: map,
+            title: "Greetings!"
+        });
+    }
+
+});
 
 function route_save(id) {
 
@@ -266,6 +337,7 @@ function bus_select(id) {
 }
 
 function passengers_select(res) {
+
 //    var url = phonegap + "passensgers";
     //    var res = syncAjaxGet(url, {conductor_id: conductor_id, password: password});
 //  ***************  dummy data
@@ -404,6 +476,7 @@ function syncAjaxPost(u, arr) {
     var obj = $.ajax(u, {async: false
         , type: 'POST'
         , data: arr // {cmd:3} //JSON.stringify(arr)     //  {cmd:3}// ?cmd=3
+        , crossDomain: true
 //        , dataType: String
         , success: callAjaxSuccessful   //            function(data){alert(data);}
         , error: errorFunction});
