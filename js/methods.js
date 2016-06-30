@@ -38,6 +38,7 @@ function login() {
     var password = $("#password").val();
     phonegap = "https://" + $("#ip").val() + "/AshesiBusApp/Api/public/";
     var url = phonegap + "login";
+    prompt("url", url);
     var res = syncAjaxPost(url, {username: username, password: password});
 //    dummy data
 //    var res = {status: "success", role: "conductor",
