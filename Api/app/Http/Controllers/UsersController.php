@@ -117,12 +117,12 @@ public function postLogin(){
 			}
 	    
 	    }
-	    else{
-	    	$res_json = '{"status":"fail","message":'.$validator->messages().'}';	
-	    }
+    }
 
-		
-      		return $res_json;
+    public function logout() {
+# code...
+        Auth::logout();
+        return '{"status":"success", "message":"logout success"}';
     }
 
 
