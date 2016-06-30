@@ -115,14 +115,14 @@ public function postLogin(){
 
 				$res_json = '{"status":"fail", "message":"Wrong login details"}';
 			}
+
+
 	    
 	    }
-    }
-
-    public function logout() {
-# code...
-        Auth::logout();
-        return '{"status":"success", "message":"logout success"}';
+	    else{
+	    	$res_json = '{"status":"fail", "message":'.$validator->messages().'"}';
+	    }
+	    return $res_json;
     }
 
 
