@@ -29,12 +29,14 @@ $(document).ready(function () {
     window.setInterval(function () {
         sendBusXY();
     }, 30000);
+
 });
 
 function login() {
 
     var username = $("#username").val();
     var password = $("#password").val();
+    phonegap = "https://" + $("#ip").val() + "/AshesiBusApp/Api/public/";
     var url = phonegap + "login";
     var res = syncAjaxPost(url, {username: username, password: password});
 //    dummy data
@@ -144,7 +146,7 @@ function sendBusXY() {
 
 $(document).on("pageshow", "#map-page", function () {
     sendBusXY();
-    var defaultLatLng = new google.maps.LatLng(34.0983425, -118.3267434); // Default to Hollywood, CA when no geolocation support
+    var defaultLatLng = new google.maps.LatLng(5.6037168, -0.1869644); // Default to Hollywood, CA when no geolocation support
     if (navigator.geolocation) {
         function success(pos) {
             // Location found, show map with these coordinates
@@ -160,7 +162,7 @@ $(document).on("pageshow", "#map-page", function () {
     }
     function drawMap(latlng) {
         var myOptions = {
-            zoom: 10,
+            zoom: 15,
             center: latlng,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
