@@ -332,153 +332,148 @@ function passengers_select(res) {
         return;
     }
     var listings = '<fieldset data-role="controlgroup" id="passengers" data-filter="true" data-icon="false">';
-            << << << < HEAD
-            $.each(res.passengers, function (key, value) {
-                listings += '<input type="checkbox" class="passengers_checkbox" name="passengers_checkbox" id="' + value.occupant_id + '"/>';
-                listings += '<label for="' + value.occupant_id + '">';
-                        === === =
-                        $.each(res.unpaidCustomers, function (key, value) {
-                            listings += '<input type="checkbox" class="passengers_checkbox" name="passengers_checkbox" id="' + value.id + '"/>';
-                            listings += '<label for="' + value.id + '">';
-                                    >>> >>> > origin / savesettings
-                                    listings += '<span style="display: inline-block;" >';
-                            listings += "<span><img src='" + 'resources/2.jpg' + "' alt='' width='40' height='40'>";
-                            listings += "<span style='float:right; margin-left:10px'><div> " + value.name + "<br>";
-                            listings += "" + value.balance + "</div> </span> </span>  ";
-                            listings += "</span>";
-                            listings += '</label>';
-                        });
-                listings += '</fieldset>';
-                $("#passengers").replaceWith(listings);
-                $('#passengers').controlgroup().controlgroup('refresh');
-                window.open("index.html#passengers_select", "_self");
-            }
 
-            function payment_amount() {
-            window.open("index.html#payment_amount", "_self");
-        }
+    $.each(res.unpaidCustomers, function (key, value) {
+        listings += '<input type="checkbox" class="passengers_checkbox" name="passengers_checkbox" id="' + value.id + '"/>';
+        listings += '<label for="' + value.id + '">';
+        listings += '<span style="display: inline-block;" >';
+        listings += "<span><img src='" + 'resources/2.jpg' + "' alt='' width='40' height='40'>";
+        listings += "<span style='float:right; margin-left:10px'><div> " + value.name + "<br>";
+        listings += "" + value.balance + "</div> </span> </span>  ";
+        listings += "</span>";
+        listings += '</label>';
+    });
+    listings += '</fieldset>';
+    $("#passengers").replaceWith(listings);
+    $('#passengers').controlgroup().controlgroup('refresh');
+    window.open("index.html#passengers_select", "_self");
+}
+
+function payment_amount() {
+    window.open("index.html#payment_amount", "_self");
+}
 
 //sources: http://stackoverflow.com/questions/11138898/check-if-a-jquery-mobile-checkbox-is-checked
-        function confirm_payment() {
-            var amount = $("#amount").val();
-            var payers = [{amount: amount, bus_id: bus_id, driver_id: driver_id, route_id: route_id}];
-            $('input[type="checkbox"]').filter('.passengers_checkbox').each(function () {
-                var id = $(this).attr('id');
-                if ($(this).is(':checked')) {
-                    // perform operation for checked
+function confirm_payment() {
+    var amount = $("#amount").val();
+    var payers = [{amount: amount, bus_id: bus_id, driver_id: driver_id, route_id: route_id}];
+    $('input[type="checkbox"]').filter('.passengers_checkbox').each(function () {
+        var id = $(this).attr('id');
+        if ($(this).is(':checked')) {
+            // perform operation for checked
 //            alert(id);
-                    payers.push({occupant_id: id});
-                }
-                else {
-                    // perform operation for unchecked
-                }
-
-            });
+            payers.push({occupant_id: id});
+        }
+        else {
+            // perform operation for unchecked
         }
 
-        function request_routes() {
-            $(".caretaker_name").text(caretaker);
-            $(".childs_name").text("Welcome " + child_name + " " + child_age);
+    });
+}
+
+function request_routes() {
+    $(".caretaker_name").text(caretaker);
+    $(".childs_name").text("Welcome " + child_name + " " + child_age);
 //    $(".child_age").text(child_age);
-        }
+}
 
-        function syncAjax(u) {
-            prompt("url", u);
-            var obj = $.ajax({url: u, async: false});
-            return $.parseJSON(obj.responseText);
-        }
+function syncAjax(u) {
+    prompt("url", u);
+    var obj = $.ajax({url: u, async: false});
+    return $.parseJSON(obj.responseText);
+}
 
-        function logout() {
-            window.open("index.html", "_self");
-        }
+function logout() {
+    window.open("index.html", "_self");
+}
 
-        function first_page_get_info() {
-            child_name = $("#child_name").val();
-            if ($("#caretaker_name_signup").val() !== '') {
-                caretaker = $("#caretaker_name_signup").val();
-            }
-            child_age = $("#child_age").val();
-        }
+function first_page_get_info() {
+    child_name = $("#child_name").val();
+    if ($("#caretaker_name_signup").val() !== '') {
+        caretaker = $("#caretaker_name_signup").val();
+    }
+    child_age = $("#child_age").val();
+}
 
 //-------------------------------------
 
-        function submit() {
-            first_page_get_info();
+function submit() {
+    first_page_get_info();
 //    window.open("index.html#thank_you_dialog", "_self");
-        }
+}
 
-        function welcomers() {
-            always();
+function welcomers() {
+    always();
 //    window.open("index.html#welcome_after_signup", "_self");
 
-        }
+}
 
-        function go_to_tit_bits() {
+function go_to_tit_bits() {
 //    window.open("index.html#tit_bits", "_self");
-        }
+}
 
-        function start_lesson() {
-            $(".childs_name_hello").text("Hello " + child_name + " " + child_age);
+function start_lesson() {
+    $(".childs_name_hello").text("Hello " + child_name + " " + child_age);
 //    window.open("index.html#start_lesson", "_self");
-        }
+}
 
 
-        function syncAjaxGet(u, arr) {
+function syncAjaxGet(u, arr) {
 //    alert(arr[0]);
-            var obj = $.ajax(u, {async: false
-                , type: 'GET'
-                , data: arr // {cmd:3} //JSON.stringify(arr)     //  {cmd:3}// ?cmd=3
+    var obj = $.ajax(u, {async: false
+        , type: 'GET'
+        , data: arr // {cmd:3} //JSON.stringify(arr)     //  {cmd:3}// ?cmd=3
 //        , dataType: String
 //        , success: callAjaxSuccessful   //            function(data){alert(data);}
 //        , error: errorFunction
-            });
-            return $.parseJSON(obj.responseText);
-        }
+    });
+    return $.parseJSON(obj.responseText);
+}
 
-        function asyncAjaxGet(u, arr) {
+function asyncAjaxGet(u, arr) {
 //    alert(arr[0]);
-            var obj = $.ajax(u, {async: true
-                , type: 'GET'
-                , data: arr // {cmd:3} //JSON.stringify(arr)     //  {cmd:3}// ?cmd=3
+    var obj = $.ajax(u, {async: true
+        , type: 'GET'
+        , data: arr // {cmd:3} //JSON.stringify(arr)     //  {cmd:3}// ?cmd=3
 //        , dataType: String
-                , success: callAjaxSuccessful   //            function(data){alert(data);}
-                , error: errorFunction});
-            return $.parseJSON(obj.responseText);
-        }
+        , success: callAjaxSuccessful   //            function(data){alert(data);}
+        , error: errorFunction});
+    return $.parseJSON(obj.responseText);
+}
 
-        function syncAjaxPost(u, arr) {
+function syncAjaxPost(u, arr) {
 //    alert(arr[0]);
-            var obj = $.ajax(u, {async: false
-                , type: 'POST'
-                , data: arr // {cmd:3} //JSON.stringify(arr)     //  {cmd:3}// ?cmd=3
-                , crossDomain: true
+    var obj = $.ajax(u, {async: false
+        , type: 'POST'
+        , data: arr // {cmd:3} //JSON.stringify(arr)     //  {cmd:3}// ?cmd=3
+        , crossDomain: true
 //        , dataType: String
-                , success: callAjaxSuccessful   //            function(data){alert(data);}
-                , error: errorFunction});
-            return $.parseJSON(obj.responseText);
-        }
+        , success: callAjaxSuccessful   //            function(data){alert(data);}
+        , error: errorFunction});
+    return $.parseJSON(obj.responseText);
+}
 
-        function callAjaxSuccessful(data) {
+function callAjaxSuccessful(data) {
 //    prompt("successful ajax call ", data);
-        }
+}
 
-        function errorFunction() {
-            alert("ajax function failed");
-        }
+function errorFunction() {
+    alert("ajax function failed");
+}
 
 //sources: http://stackoverflow.com/questions/979256/sorting-an-array-of-javascript-objects
-        function sort_by(field, reverse, primer) {
+function sort_by(field, reverse, primer) {
 
-            var key = primer ?
-                    function (x) {
-                        return primer(x[field]);
-                    } :
-                    function (x) {
-                        return x[field];
-                    };
-            var reverse = !reverse ? 1 : -1;
-            return function (a, b) {
-                return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+    var key = primer ?
+            function (x) {
+                return primer(x[field]);
+            } :
+            function (x) {
+                return x[field];
             };
-        }
-        ;
+    var reverse = !reverse ? 1 : -1;
+    return function (a, b) {
+        return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+    };
+}
+;
