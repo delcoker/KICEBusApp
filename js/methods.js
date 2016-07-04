@@ -21,7 +21,7 @@ var curLong = 0;
 var curLat = 0;
 
 //var phonegap = "https://10.10.50.37/AshesiBusApp/Api/public/";
-var phonegap = "https://192.168.8.102/AshesiBusApp/Api/public/";
+var phonegap = "http://10.10.26.135/AshesiBusApp/Api/public/";
 //var phonegap = "http://localhost/AshesiBusApp/Api/public/";
 
 
@@ -36,7 +36,7 @@ function login() {
 
     var username = $("#username").val();
     var password = $("#password").val();
-    phonegap = "https://" + $("#ip").val() + "/AshesiBusApp/Api/public/";
+//    phonegap = "http://" + $("#ip").val() + "/AshesiBusApp/Api/public/";
     var url = phonegap + "login";
     prompt("url", url);
     var res = syncAjaxPost(url, {username: username, password: password});
@@ -81,7 +81,6 @@ function login() {
         res.drivers.sort(sort_by('name', false, function (a) {
             return a.toUpperCase();
         }));
-        var listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_driver">';
         $.each(res.drivers, function (key, value) {
             listings += '<li><a href="#driver_save" onclick="driver_save(' + value.driver_id + ')">';
             listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
