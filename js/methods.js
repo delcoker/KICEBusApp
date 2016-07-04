@@ -21,7 +21,7 @@ var curLong = 0;
 var curLat = 0;
 
 //var phonegap = "https://10.10.50.37/AshesiBusApp/Api/public/";
-var phonegap = "http://10.10.26.135/AshesiBusApp/Api/public/";
+var phonegap = "https://10.10.26.135/AshesiBusApp/Api/public/";
 //var phonegap = "http://localhost/AshesiBusApp/Api/public/";
 
 
