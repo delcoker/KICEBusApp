@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="com.kingston.pg2" versionCode="11" version="1.2.0">
     <name>
-        Ashesi Bus App
+        ICE-K Ash Bus App
     </name>
     <description>
         Helping the Ashesi community pay Ashesi better.
@@ -10,5 +10,11 @@
         Kingston Coker
     </author>
     <icon src="resources/bus.png"/>
+    <gap:splash src="splash.png"/>
+    <gap:plugin name="com.phonegap.plugins.barcodescanner" version="2.2.0"/>
+    <gap:plugin name="cordova-plugin-whitelist" source="npm"/>
+    <allow-navigation href="*"/>
+    <allow-intent href="*"/>
+    <access origin="*"/>
     <gap:splash src="splash.png"/>
 </widget>
