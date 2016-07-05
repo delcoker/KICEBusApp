@@ -8,7 +8,8 @@
 	use App\Http\Requests;
 	use Validator;
 	use App\Transaction;
-
+    use Auth;
+	
 	use Illuminate\Support\Facades\Input;
 
 
@@ -16,11 +17,10 @@
 	 
 		
 		
-		public function checkBalance(Request $request){
+		public function transaction(Request $request){
 			
 		//rules for a transaction request	
 			$transactionRules = [
-			'conductor_id' => 'required',
 			'bus_id'       => 'required',
 			'driver_id'    => 'required',
 			'route_id'     => 'required'
@@ -49,9 +49,12 @@
 						$findAccount->balance=$findAccount['balance']-(float)$request->amount;
 						$findAccount->update();		
 		
+						//Get information about the conductor
+						$authenticatedUser = Auth::user();
+                
 						//create a new transaction
 						$transaction= new Transaction();
-						$transaction->conductor_id=$request->conductor_id;
+						$transaction->conductor_id=$authenticatedUser->conductor_id;
 						$transaction->occupation_id=$var['occupant_id'];   
 						$transaction->bus_id=$request->bus_id;
 						$transaction->driver_id=$request->driver_id;
