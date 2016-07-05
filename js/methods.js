@@ -311,16 +311,9 @@ function bus_select(id) {
 
 function passengers_select(res) {
 
-//    var url = phonegap + "passensgers";
-    //    var res = syncAjaxGet(url, {conductor_id: conductor_id, password: password});
-//  ***************  dummy data
-//    var res = {status: "success", passengers: [{"id": "1", "name": "Joseph Nti", "role": "passenger", "amount_left": "200.50"},
-//            {"id": "2", "name": "Esi Yenuah", "role": "passenger", "amount_left": "323.50"},
-//            {"id": "4", "name": "Iddris Alba", "role": "passenger", "amount_left": "2.50"},
-//            {"id": "5", "name": "Jessica Alba", "role": "passenger", "amount_left": "99.50"},
-//            {"id": "8", "name": "Zul Kyei", "role": "passenger", "amount_left": "100.50"},
-//            {"id": "10", "name": "King Coker", "role": "passenger", "amount_left": "4430.50"}],
-//        default_settings: {route_id: 1, driver_id: 2, bus_id: 3, first_time: false}};
+    bus_id = res.defaultSettings[0].bus_id;
+    driver_id = res.defaultSettings[0].driver_id;
+    route_id = res.defaultSettings[0].route_id;
 
 //****************
 
@@ -357,7 +350,21 @@ function payment_amount() {
 //sources: http://stackoverflow.com/questions/11138898/check-if-a-jquery-mobile-checkbox-is-checked
 function confirm_payment() {
     var amount = $("#amount").val();
-    var payers = [{amount: amount, bus_id: bus_id, driver_id: driver_id, route_id: route_id}];
+    if (amount === "" || amount < 1) {
+        alert("Please enter a value");
+        return;
+    }
+    else if (amount === 0) {
+        alert("Please enter a value");
+    }
+    else if (amount === 0) {
+        alert("Please enter a value");
+    }
+    var res = {amount: amount,
+        bus_id: bus_id,
+        driver_id: driver_id,
+        route_id: route_id};
+    var payers = [];
     $('input[type="checkbox"]').filter('.passengers_checkbox').each(function () {
         var id = $(this).attr('id');
         if ($(this).is(':checked')) {
@@ -368,8 +375,14 @@ function confirm_payment() {
         else {
             // perform operation for unchecked
         }
-
     });
+    res.occupants = payers;
+
+    var url = phonegap + "transaction";
+    prompt("url", url);
+    var res = syncAjaxPost(url, res);
+
+    alert(res.message);
 }
 
 function request_routes() {
@@ -433,7 +446,7 @@ function syncAjaxGet(u, arr) {
 
 function asyncAjaxGet(u, arr) {
 //    alert(arr[0]);
-    var obj = $.ajax(u, {async: true
+    var obj = $.ajax(u, {async: false
         , type: 'GET'
         , data: arr // {cmd:3} //JSON.stringify(arr)     //  {cmd:3}// ?cmd=3
 //        , dataType: String
