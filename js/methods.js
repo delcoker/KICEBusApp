@@ -20,8 +20,11 @@ var all_drivers = {};
 var curLong = 0;
 var curLat = 0;
 
+var http_or_https = "http";
+var ip = "10.10.26.135";
+
 //var phonegap = "https://10.10.50.37/AshesiBusApp/Api/public/";
-var phonegap = "https://10.10.26.135/AshesiBusApp/Api/public/";
+var phonegap = http_or_https + "://" + ip + "/AshesiBusApp/Api/public/";
 //var phonegap = "http://localhost/AshesiBusApp/Api/public/";
 
 
@@ -140,8 +143,6 @@ function sendBusXY() {
         $('.Lat').html(lat);
         $('.Long').html(lng);
     }
-
-
 }
 
 $(document).on("pageshow", "#map-page", function () {
@@ -174,8 +175,8 @@ $(document).on("pageshow", "#map-page", function () {
             title: "Greetings!"
         });
     }
-
 });
+
 function route_save(id) {
 
     settings_route_id = id;
@@ -240,7 +241,6 @@ function settings_save() {
     if (!(res.status === "success")) {
         alert("Your settings could not be saved. Try at a later time");
     }
-
     passengers_select(res);
 }
 
@@ -308,7 +308,6 @@ function bus_select(id) {
     $('#busses').listview().listview('refresh');
     window.open("index.html#bus_select", "_self");
 }
-
 
 function passengers_select(res) {
 
