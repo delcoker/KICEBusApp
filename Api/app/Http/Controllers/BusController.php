@@ -48,7 +48,7 @@ class BusController extends Controller
     								->first();
 
     	if($busLocation){
-    		$res_json = '{"status":"success", "message":'. json_encode($busLocation).'}';
+    		$res_json = '{"status":"success", "busLocation":'. json_encode($busLocation).'}';
     	}
     	else{
     		$res_json = '{"status":"failed", "message":"Unable to get bus location"}';

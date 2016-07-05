@@ -26,6 +26,8 @@ $router->group(['middleware' => 'auth'], function() {
 
 	Route::get('logout', array('as'=>'logout','uses'=>'UsersController@logout'));
 
+	Route::get('unpaidoccupants', array('as'=>'unpaidoccupants','middleware' => 'role', 'uses'=>'UsersController@getUnpaidOccupants'));
+
 	Route::post('settings', array('as'=>'settings','middleware' => 'role','uses'=>'UsersController@saveSettings'));
 
 	Route::get('buslocation', array('as'=>'buslocation','uses'=>'BusController@getBusLocation'));

@@ -175,4 +175,35 @@ class UsersController extends Controller {
         return $res_json;
     }
 
+
+
+    function getUnpaidOccupants(){
+
+    	$user = Auth::user();
+        $startTime = Carbon::now();
+        $startTime->hour = 5;
+        $startTime->minute = 00;
+        $startTime->second = 00;
+
+
+        $endTime = Carbon::now();
+        $endTime->hour = 9;
+        $endTime->minute = 00;
+        $endTime->second = 00;
+
+    	$unpaidOccupants = User::leftjoin('transactions', 'transactions.occupation_id', '=', 'occupants.id')
+                    ->whereNotBetween('transactions.created_at', array($startTime, $endTime))
+                    ->orWhere('transactions.transaction_id', "=", null)
+                    ->select('occupants.id', 'occupants.name', 'occupants.balance')
+                    ->distinct()
+                    ->get();
+
+
+        $res_json = '{"status":"success", "unpaidOccupants":'. json_encode($unpaidOccupants).'}';
+
+
+		return $res_json;
+    	}
+
+
 }
