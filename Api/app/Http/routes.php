@@ -19,7 +19,7 @@ Route::auth();
 
 Route::post('/login', 'UsersController@postLogin');
 
-Route::post('/checkBalance','TransactionController@checkBalance');
+
 
 $router->group(['middleware' => 'auth'], function() {
     
@@ -31,4 +31,6 @@ $router->group(['middleware' => 'auth'], function() {
 	Route::post('settings', array('as'=>'settings','middleware' => 'role','uses'=>'UsersController@saveSettings'));
 
 	Route::post('buslocation', array('as'=>'buslocation','uses'=>'BusController@addBusLocation'));
+	
+	Route::post('/transaction',array('as'=>'transaction','uses'=>'TransactionController@transaction'));
 });
