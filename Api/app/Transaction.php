@@ -10,6 +10,7 @@ class Transaction extends Model
    
     protected $table = 'transactions';
 	protected $guarded =['transaction_id'];
+	protected $primaryKey =['transaction_id'];
 	
 	public function occupant()
 	{
