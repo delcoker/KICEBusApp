@@ -20,17 +20,17 @@ var all_drivers = {};
 var curLong = 0;
 var curLat = 0;
 
-var http_or_https = "http";
+var http_or_https = "                        ";
 var ip = "10.10.26.135";
 
 //var phonegap = "https://10.10.50.37/AshesiBusApp/Api/public/";
-var phonegap = http_or_https + "://" + ip + "/AshesiBusApp/Api/public/";
+var phonegap = "http" + http_or_https.trim() + "://" + ip + "/AshesiBusApp/Api/public/";
 //var phonegap = "http://localhost/AshesiBusApp/Api/public/";
 
 
 $(document).ready(function () {
     window.setInterval(function () {
-        sendBusXY();
+//        sendBusXY();
     }, 30000);
 
 });
@@ -146,7 +146,7 @@ function sendBusXY() {
 }
 
 $(document).on("pageshow", "#map-page", function () {
-    sendBusXY();
+//    sendBusXY();
     var defaultLatLng = new google.maps.LatLng(5.6037168, -0.1869644); // Default to Hollywood, CA when no geolocation support
     if (navigator.geolocation) {
         function success(pos) {
@@ -448,6 +448,9 @@ function syncAjaxPost(u, arr) {
         , type: 'POST'
         , data: arr // {cmd:3} //JSON.stringify(arr)     //  {cmd:3}// ?cmd=3
         , crossDomain: true
+//        , beforeSend: function (request) {
+//            request.setRequestHeader("Access-Control-Allow-Origin: ", "*");
+//        }
 //        , dataType: String
         , success: callAjaxSuccessful   //            function(data){alert(data);}
         , error: errorFunction});
