@@ -19,6 +19,8 @@ Route::auth();
 
 Route::post('/login', 'UsersController@postLogin');
 
+Route::post('/checkBalance','TransactionController@checkBalance');
+
 $router->group(['middleware' => 'auth'], function() {
     
 
