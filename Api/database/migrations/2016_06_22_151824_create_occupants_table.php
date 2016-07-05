@@ -13,7 +13,7 @@ class CreateOccupantsTable extends Migration
     public function up()
     {
         Schema::create('occupants', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('occupant_id');
             $table->string('name');
             $table->string('email')->unique();
 			$table->string('role')->default('');

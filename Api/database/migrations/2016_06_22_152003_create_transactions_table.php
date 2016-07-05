@@ -14,6 +14,7 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->increments('transaction_id');
+			$table->integer('conductor_id');
 			$table->integer('occupation_id');
 			$table->integer('bus_id');
 			$table->integer('driver_id');
