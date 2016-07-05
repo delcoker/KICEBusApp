@@ -28,5 +28,6 @@ $router->group(['middleware' => 'auth'], function() {
 
 	Route::post('settings', array('as'=>'settings','middleware' => 'role','uses'=>'UsersController@saveSettings'));
 
+	Route::get('buslocation', array('as'=>'buslocation','uses'=>'BusController@getBusLocation'));
 	Route::post('buslocation', array('as'=>'buslocation','uses'=>'BusController@addBusLocation'));
 });

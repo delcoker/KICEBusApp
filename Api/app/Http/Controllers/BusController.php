@@ -42,4 +42,17 @@ class BusController extends Controller
     	return $res_json;
 
     }
+
+    function getBusLocation(){
+    	$busLocation = BusLocation::orderby('created_at','desc')
+    								->first();
+
+    	if($busLocation){
+    		$res_json = '{"status":"success", "message":'. json_encode($busLocation).'}';
+    	}
+    	else{
+    		$res_json = '{"status":"failed", "message":"Unable to get bus location"}';
+    	}
+    	return $res_json;
+    }
 }
