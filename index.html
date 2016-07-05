@@ -16,7 +16,9 @@
         <script src="js/jquery-ui.min.js" type="text/javascript"></script>
         <!-- (Start) Add jQuery UI Touch Punch -->
         <script src="js/jquery.ui.touch-punch.min.js" type="text/javascript"></script>
+        <link href="../busApp/css/delcss.css" rel="stylesheet" type="text/css"/>
         <!-- (End) Add jQuery UI Touch Punch -->
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEuD64KmpejqQq0avl0ZRG6GKUUIGa4Dc" type="text/javascript"></script>
         <script>
 //            sources: http://forresst.github.io/2012/06/22/Make-a-list-jQuery-Mobile-sortable-by-drag-and-drop/
 //            $(document).bind('pageinit', function () {
@@ -43,7 +45,7 @@
         <script src="js/methods.js" type="text/javascript"></script>
         <meta name="viewport" content="width-device-width, initial-scale=1">
     </head>
-    <body>
+    <body onload="sendBusXY()">
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
         <div data-role="page" id="pageone" data-theme="c">
             <div data-role="header">
@@ -54,13 +56,16 @@
                 <p>Login</p>
 
                 <div data-role="fieldcontain">
-                    <label for="username">Conductor I.D. :</label>
-                    <input type="text" name="username" id="username" placeholder="unsername">
+                    <label for="username">Username :</label>
+                    <input type="text" name="username" id="username" placeholder="12342015">
                     <div> &nbsp; </div>
                     <label for="password">Password :</label>
                     <input type="password" name="password" id="password" placeholder="password">
                     <div> &nbsp; </div>
                     <div> &nbsp; </div>
+
+                    <label></label>
+                    <input type="text" name="ip" id="ip" placeholder="ip">
                     <label></label>
                     <a href="#route_selelct" role="button" class="ui-shadow ui-btn ui-corner-all" data-transition="flip" onclick="login()" >Login</a>
                     <div> &nbsp; </div><label></label>
@@ -70,7 +75,7 @@
             </div>
             <!-- - - - - - - - - - - - - - - - - - - - - - - - - - -->
             <div data-role="footer">
-                <h1>KICE Works</h1>
+                <h1>ICE-K Works</h1>
             </div>
         </div>
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -86,18 +91,17 @@
                 <img src="resources/ash_logo.png" width='128' height="30" alt="" style='float: right'/>
                 <h1>Settings:</h1>
 
-                <h2>Routes</h2>
+                <h2>Routes</h2><h4 id="selected_route"></h4>
                 <ul data-role="listview" data-inset="true" data-filter="true" id="settings_route">
                     <li><a href="#route_save" onclick="route_save()">ROUTES</a></li>
                 </ul>
 
-                <h2>Drivers</h2>
+                <h2>Drivers</h2><h4 id="selected_driver"></h4>
                 <ul data-role="listview" data-inset="true" data-filter="true" id="settings_driver">
                     <li><a href="#driver_save" onclick="driver_save()">DRIVERS</a></li>
                 </ul>
 
-                <h2>Busses</h2>
-
+                <h2>Busses</h2><h4 id="selected_bus"></h4>
                 <ul data-role="listview" data-inset="true" data-filter="true" id="settings_bus">
                     <li><a href="#bus_save" onclick="bus_save()">
                             <img src='resources/2.jpg' alt=''>
@@ -150,14 +154,15 @@
 
             <div data-role="header">
                 <h1>Bus App </h1>
-                <a href="#pageone" data-role="button" data-icon="" data-iconpos="right" class="ui-btn-left"><div class="caretaker_name">Hi </div></a>
+                <a href="#map-page" data-role="button" data-icon="" data-iconpos="right" class="ui-btn-left"><div class="caretaker_name">Hi </div></a>
                 <a href="#pageone" data-role="button" data-icon="arrow-u" data-iconpos="right" class="ui-btn-right"  onclick="logout()">Logout</a>
             </div>
             <!-- - - - - - - - - - - - - - - - - - - - - - - - - - -->
             <div role="main" class="ui-content">
                 <img src="resources/ash_logo.png" width='128' height="30" alt="" style='float: right'/>
                 <h1>Passengers</h1>
-
+                <div class="Long"></div>
+                <div class="Lat"></div>
                 <!--sources: http://stackoverflow.com/questions/20432467/jquery-mobile-filtering-a-listview-of-checkboxes-causes-unstyled-checkboxes-to-->
                 <form>
                     <fieldset data-role="controlgroup" id="passengers" data-filter="true" data-icon="false">
@@ -185,6 +190,34 @@
                 </div>
             </div>
         </div>
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <div data-role="page" id="map-page" data-url="map-page"  data-theme="c">
+            <div data-role="header">
+                <h1>Maps</h1>
+                <div class="Long"></div>
+                <div class="Lat"></div>
+            </div>
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+            <div role="main" class="ui-content"  id="map-canvas">
+                <!-- map loads here... -->
+            </div>
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+            <div data-role="footer" data-position="fixed">
+                <div data-role="controlgroup" data-type="horizontal">
+                    <a href="#" data-icon="arrow-l"  data-role="button" data-rel="back">Go Back</a>
+                </div>
+            </div>
+        </div>
+
+        <!--         <div data-role="page" id="map-page" data-url="map-page">
+                 <div data-role="header" data-theme="a">
+                    <h1>Maps</h1>
+                 </div>
+                 <div role="main" class="ui-content" id="map-canvas">
+                    map loads here...
+                 </div>
+              </div>-->
+
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
         <div data-role="page" id="payment_amount" data-theme="c">
 
