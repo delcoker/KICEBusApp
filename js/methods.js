@@ -21,7 +21,8 @@ var curLong = 0;
 var curLat = 0;
 
 var http_or_https = "                        ";
-var ip = "10.10.26.135";
+//var ip = "10.10.26.135";
+var ip = "10.10.26.123";
 
 //var phonegap = "https://10.10.50.37/AshesiBusApp/Api/public/";
 var phonegap = "http" + http_or_https.trim() + "://" + ip + "/AshesiBusApp/Api/public/";
@@ -41,7 +42,7 @@ function login() {
     var password = $("#password").val();
 //    phonegap = "http://" + $("#ip").val() + "/AshesiBusApp/Api/public/";
     var url = phonegap + "login";
-    prompt("url", url);
+
     var res = syncAjaxPost(url, {username: username, password: password});
 //    dummy data
 //    var res = {status: "success", role: "conductor",
@@ -142,6 +143,19 @@ function sendBusXY() {
         curLat = lat;
         $('.Lat').html(lat);
         $('.Long').html(lng);
+    }
+
+    var location_name = "unknown but in gh";
+
+    var url = phonegap + 'buslocation';
+    var res = syncAjaxPost(url, {longitude: curLong
+        , latitude: curLat
+        , bus_id: bus_id
+        , route_id: route_id
+        , name: location_name});
+
+    if (res.message !== "success") {
+        alert("coordinates not saved");
     }
 }
 
@@ -456,11 +470,14 @@ function asyncAjaxGet(u, arr) {
 }
 
 function syncAjaxPost(u, arr) {
+//    prompt("url", u);
 //    alert(arr[0]);
-    var obj = $.ajax(u, {async: false
+    var obj = $.ajax({url: u, async: false
         , type: 'POST'
         , data: arr // {cmd:3} //JSON.stringify(arr)     //  {cmd:3}// ?cmd=3
         , crossDomain: true
+        , dataType: 'jsonp'
+//        , headers: {"Access-Control-Allow-Origin ": "*"}
 //        , beforeSend: function (request) {
 //            request.setRequestHeader("Access-Control-Allow-Origin: ", "*");
 //        }
