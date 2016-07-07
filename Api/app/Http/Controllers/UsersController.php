@@ -40,6 +40,7 @@ class UsersController extends Controller {
 
                 Auth::login($user);
                 $authenticatedUser = Auth::user();
+                // dd($authenticatedUser);
                 if ($authenticatedUser->role == 'conductor') {
 
                     $defaultSettings = DefaultSettings::where('occupant_id', '=', $authenticatedUser->id)->first();
