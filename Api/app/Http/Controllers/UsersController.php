@@ -14,6 +14,7 @@ use App\Routes;
 use App\Buses;
 use App\Drivers;
 use Carbon\Carbon;
+use Response;
 
 class UsersController extends Controller {
 
@@ -111,7 +112,9 @@ class UsersController extends Controller {
         }
 
 
-        return $res_json;
+//        return "\"" + $res_json + "\"";
+        return Response::json($res_json)->setCallback(Input::get('callback'));
+//        return $res_json;
     }
 
     public function logout() {
@@ -173,7 +176,7 @@ class UsersController extends Controller {
             $res_json = '{"status":"fail","message":"Unable to save settings. Please  try again."}';
         }
 
-        return $res_json;
+        return Response::json($res_json)->setCallback(Input::get('callback'));
     }
 
 }

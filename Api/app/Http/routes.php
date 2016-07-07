@@ -17,7 +17,7 @@ Route::get('/', function () {
 
 Route::auth();
 
-Route::post('/login', 'UsersController@postLogin');
+Route::get('/login', 'UsersController@postLogin');
 
 //Route::post('transaction','TransactionController@transaction');
 
@@ -28,11 +28,11 @@ $router->group(['middleware' => 'web'], function() {
 
     Route::get('logout', array('as' => 'logout', 'uses' => 'UsersController@logout'));
 
-    Route::post('settings', array('as' => 'settings', 'middleware' => 'role', 'uses' => 'UsersController@saveSettings'));
+    Route::get('settings', array('as' => 'settings', 'middleware' => 'role', 'uses' => 'UsersController@saveSettings'));
 
 
 
     Route::post('transaction', 'TransactionController@transaction');
 
-    Route::post('buslocation', array('as' => 'buslocation', 'uses' => 'BusController@addBusLocation'));
+    Route::get('buslocation', array('as' => 'buslocation', 'uses' => 'BusController@addBusLocation'));
 });
