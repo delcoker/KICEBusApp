@@ -21,9 +21,10 @@ var all_drivers = {};
 var curLong = 200;
 var curLat = 100;
 
+// put an "s" anywhere here if you want the request to go as https
 var http_or_https = "                        ";
-//var ip = "10.10.26.135";
-var ip = "10.10.26.123";
+//var ip = "192.168.8.102";
+var ip = "10.10.26.210";
 
 //var phonegap = "https://10.10.50.37/AshesiBusApp/Api/public/";
 var phonegap = "http" + http_or_https.trim() + "://" + ip + "/AshesiBusApp/Api/public/";
@@ -48,7 +49,7 @@ function login() {
 
     var res = syncAjaxGetLogin(url, {username: username, password: password});
 
-
+    {
 //    dummy data
 //    var res = {status: "success", role: "conductor",
 
@@ -124,6 +125,7 @@ function login() {
 //    else {
 //        passengers_select(res);
 //    }
+    }
 }
 
 function sendBusXY() {
@@ -154,7 +156,7 @@ function sendBusXY() {
 
     var url = phonegap + 'buslocation';
 
-    if (bus_id === 0 || curLat === 100 || curLong === 200) {
+    if (bus_id === 0 || curLat === 100 || curLong === 200 || curLat === -0.1869644 && curLong === 5.6037168) {
         return;
     }
 
@@ -225,6 +227,7 @@ function driver_save(id) {
     $('#selected_driver').text("Current Driver: " + curr);
 }
 
+// when
 function bus_save(id) {
     settings_bus_id = id;
     var curr = "";
@@ -257,14 +260,11 @@ function settings_save() {
     }
 
     var url = phonegap + "settings";
-    var res = syncAjaxPost(url, {route_id: settings_route_id,
+    syncAjaxSaveSettings(url, {route_id: settings_route_id,
         driver_id: settings_driver_id,
         bus_id: settings_bus_id});
 //    var res = {status: "success"};
-    if (!(res.status === "success")) {
-        alert("Your settings could not be saved. Try at a later time");
-    }
-    passengers_select(res);
+
 }
 
 function driver_select(id) {
@@ -403,7 +403,7 @@ function confirm_payment() {
 
     var url = phonegap + "transaction";
     prompt("url", url);
-    var res = syncAjaxPost(url, res);
+    syncAjaxConfirmPayment(url, res);
 
     alert(res.message);
 }
@@ -481,12 +481,12 @@ function syncAjaxGet(u, arr) {
 //        , $.support.cors = true;
         , jsonpCallback: 'callAjaxSuccessful'
 
-        , complete: function (data) {
-//            console.log($.parseJSON(data));
-            proper = $.parseJSON(data);
-            return proper;
+//        , complete: function (data) {
+////            console.log($.parseJSON(data));
+//            proper = $.parseJSON(data);
+//            return proper;
 
-        }
+//    }
 //        , error: errorFunction
     });
 }
@@ -496,44 +496,26 @@ function syncAjaxGetLogin(u, arr) {
 //    alert(arr[0]);
     var obj = $.ajax({url: u, async: false
         , type: 'GET'
-//        , jsonp: 'jsonp'
         , crossDomain: true
-        , data: arr // {cmd:3} //JSON.stringify(arr)     //  {cmd:3}// ?cmd=3
+        , data: arr
         , dataType: 'jsonp'
-//        , headers: {"Access-Control-Allow-Origin ": "*"}
-//        , jsonp: "callAjaxSuccessful"
-//        , $.support.cors = true;
-        , jsonpCallback: 'callAjaxSuccessful'
-
-//        , complete: function (data) {
-//            console.log($.parseJSON(data));
-//            proper = $.parseJSON(data);
-//            return proper;
-
-//        }
-//        , error: errorFunction
+        , jsonpCallback: 'callbackAjaxLoginSuccessful'
     });
 }
 
-function syncAjaxPost(u, arr) {
+function syncAjaxSaveSettings(u, arr) {
 //    prompt("url", u);
 //    alert(arr[0]);
-    var obj = $.ajax({url: u, async: false
-        , type: 'POST'
-        , data: arr // {cmd:3} //JSON.stringify(arr)     //  {cmd:3}// ?cmd=3
+    $.ajax({url: u, async: false
+        , type: 'GET'
         , crossDomain: true
+        , data: arr
         , dataType: 'jsonp'
-//        , headers: {"Access-Control-Allow-Origin ": "*"}
-//        , beforeSend: function (request) {
-//            request.setRequestHeader("Access-Control-Allow-Origin: ", "*");
-//        }
-//        , dataType: String
-        , success: callAjaxSuccessful   //            function(data){alert(data);}
-        , error: errorFunction});
-    return $.parseJSON(obj.callback);
+        , jsonpCallback: 'callbackAjaxSaveSettings'
+    });
 }
 
-function callAjaxSuccessful(data) {
+function callbackAjaxLoginSuccessful(data) {
     var res = $.parseJSON(data);
     if (!(res.status === 'success')) {
 
@@ -546,16 +528,16 @@ function callAjaxSuccessful(data) {
             return a.toUpperCase();
         }));
         all_routes = res.routes;
-        var listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_route">';
+        var route_listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_route">';
         $.each(res.routes, function (key, value) {
-            listings += '<li><a href="#route_save" onclick="route_save(' + value.route_id + ')">';
-            listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
-            listings += "<h2>" + value.name + "</h2>";
-            listings += "<p>" + value.name + "</p>";
-            listings += '</a></li> ';
+            route_listings += '<li><a href="#route_save" onclick="route_save(' + value.route_id + ')">';
+            route_listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
+            route_listings += "<h2>" + value.name + "</h2>";
+            route_listings += "<p>" + value.name + "</p>";
+            route_listings += '</a></li> ';
         });
-        listings += '</ul>';
-        $("#settings_route").replaceWith(listings);
+        route_listings += '</ul>';
+        $("#settings_route").replaceWith(route_listings);
         $('#settings_route').listview().listview('refresh');
         // load drivers
 
@@ -563,15 +545,16 @@ function callAjaxSuccessful(data) {
         res.drivers.sort(sort_by('name', false, function (a) {
             return a.toUpperCase();
         }));
+        var driver_listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_driver">';
         $.each(res.drivers, function (key, value) {
-            listings += '<li><a href="#driver_save" onclick="driver_save(' + value.driver_id + ')">';
-            listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
-            listings += "<h2>" + value.name + "</h2>";
-            listings += "<p>" + value.name + "</p>";
-            listings += '</a></li> ';
+            driver_listings += '<li><a href="#driver_save" onclick="driver_save(' + value.driver_id + ')">';
+            driver_listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
+            driver_listings += "<h2>" + value.name + "</h2>";
+            driver_listings += "<p>" + value.name + "</p>";
+            driver_listings += '</a></li> ';
         });
-        listings += '</ul>';
-        $("#settings_driver").replaceWith(listings);
+        driver_listings += '</ul>';
+        $("#settings_driver").replaceWith(driver_listings);
         $('#settings_driver').listview().listview('refresh');
         // load busses
 
@@ -579,18 +562,19 @@ function callAjaxSuccessful(data) {
             return a.toUpperCase();
         }));
         all_busses = res.buses;
-        var listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_bus">';
+
+        var bus_listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_bus">';
 
         $.each(res.buses, function (key, value) {
 
-            listings += '<li><a href="#bus_save" onclick="bus_save(' + value.bus_id + ')">';
-            listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
-            listings += "<h2>" + value.name + "</h2>";
-            listings += "<p>" + value.name + "</p>";
-            listings += '</a></li> ';
+            bus_listings += '<li><a href="#bus_save" onclick="bus_save(' + value.bus_id + ')">';
+            bus_listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
+            bus_listings += "<h2>" + value.name + "</h2>";
+            bus_listings += "<p>" + value.name + "</p>";
+            bus_listings += '</a></li> ';
         });
-        listings += '</ul>';
-        $("#settings_bus").replaceWith(listings);
+        bus_listings += '</ul>';
+        $("#settings_bus").replaceWith(bus_listings);
         $('#settings_bus').listview().listview('refresh');
         window.open("index.html#settings_select", "_self");
     }
@@ -604,6 +588,14 @@ function callAjaxSuccessful(data) {
 //    debugger
 //    prompt("successful ajax call ", data);
 //}
+
+function callbackAjaxSaveSettings(data) {
+    var res = (data);
+    if (!(res.status === "success")) {
+        alert("Your settings could not be saved. Try at a later time");
+    }
+    passengers_select(res);
+}
 
 function errorFunction() {
     alert("ajax function failed");

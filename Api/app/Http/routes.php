@@ -21,7 +21,7 @@ Route::get('/login', 'UsersController@postLogin');
 
 //Route::post('transaction','TransactionController@transaction');
 
-$router->group(['middleware' => 'web'], function() {
+$router->group(['middleware' => 'web', 'middleware' => 'auth'], function() {
 
 
     // Only authenticated users may enter...

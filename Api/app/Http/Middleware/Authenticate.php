@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use Input;
+use Response;
 
 class Authenticate {
 
@@ -21,7 +23,8 @@ class Authenticate {
             if ($request->ajax() || $request->wantsJson()) {
                 return response('Unauthorized.', 401);
             } else {
-                return response()->json(['status' => 'Unauthorized', 'message' => 'Please login in First']);
+                return response()->json(['status' => 'Unauthorized', 'message' => 'Please login in First'])->setCallback(Input::get('callback'));
+//                return Response::json(['status' => 'Unauthorized', 'message' => 'Please login in First'])->setCallback(Input::get('callback'));
             }
         }
 
