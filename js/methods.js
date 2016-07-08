@@ -402,7 +402,7 @@ function confirm_payment() {
     res.occupants = payers;
 
     var url = phonegap + "transaction";
-    prompt("url", url);
+//    prompt("url", url);
     syncAjaxConfirmPayment(url, res);
 }
 
