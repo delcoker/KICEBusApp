@@ -32,7 +32,7 @@ $router->group(['middleware' => 'auth'], function() {
 
 
 
-    Route::get('transaction', ['middleware' => 'role','TransactionController@transaction']);
+    Route::get('transaction', array('as' => 'transaction', 'middleware' => 'role', 'uses' => 'TransactionController@transaction'));
 
     Route::get('buslocation', array('as' => 'buslocation', 'uses' => 'BusController@addBusLocation'));
 });
