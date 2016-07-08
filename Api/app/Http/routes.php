@@ -21,7 +21,7 @@ Route::get('/login', 'UsersController@postLogin');
 
 //Route::post('transaction','TransactionController@transaction');
 
-$router->group(['middleware' => 'web', 'middleware' => 'auth'], function() {
+$router->group(['middleware' => 'auth'], function() {
 
 
     // Only authenticated users may enter...
@@ -32,7 +32,7 @@ $router->group(['middleware' => 'web', 'middleware' => 'auth'], function() {
 
 
 
-    Route::post('transaction', 'TransactionController@transaction');
+    Route::get('transaction', ['middleware' => 'role','TransactionController@transaction']);
 
     Route::get('buslocation', array('as' => 'buslocation', 'uses' => 'BusController@addBusLocation'));
 });

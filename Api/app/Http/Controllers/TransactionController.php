@@ -35,7 +35,7 @@ class TransactionController extends Controller {
                 $var = json_decode($myVar, true);
 
                 //find a paticular user
-                $findAccount = \App\User::find($var['occupant_id']);
+                $findAccount = \App\User::find($var['id']);
 
                 //checks if a user has a minimum balance
                 if ($findAccount['balance'] > (float) $request->amount) {
@@ -49,7 +49,7 @@ class TransactionController extends Controller {
                     //create a new transaction
                     $transaction = new Transaction();
                     $transaction->conductor_id = $authenticatedUser->conductor_id;
-                    $transaction->occupation_id = $var['occupant_id'];
+                    $transaction->occupation_id = $var['id'];
                     $transaction->bus_id = $request->bus_id;
                     $transaction->driver_id = $request->driver_id;
                     $transaction->route_id = $request->route_id;
