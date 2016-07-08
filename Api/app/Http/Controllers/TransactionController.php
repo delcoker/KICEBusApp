@@ -8,6 +8,7 @@ use Validator;
 use App\Transaction;
 use Auth;
 use Illuminate\Support\Facades\Input;
+use Response;
 
 class TransactionController extends Controller {
 
@@ -28,15 +29,20 @@ class TransactionController extends Controller {
 
             //Get list of occupants to proceed with transaction
             $passengers = $request->occupants;
-            $passengersData = json_decode($passengers, true); //return an array format data
+			//dd($passengers);
+            //$passengersData = json_decode($passengers); 
+			//$passengersData = json_decode($passengers);
+			//dd($passengers);
+			
+			
+            foreach ($passengers as $i) {
 
-            foreach ($passengersData as $i) {
-                $myVar = json_encode($i);
-                $var = json_decode($myVar, true);
-
+				$i=explode(": ",$i);//return an array format data
+;
                 //find a paticular user
-                $findAccount = \App\User::find($var['id']);
+                $findAccount = \App\User::find((float)$i[1]);
 
+				
                 //checks if a user has a minimum balance
                 if ($findAccount['balance'] > (float) $request->amount) {
                     //reduce and update new balance
