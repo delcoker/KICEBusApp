@@ -37,7 +37,7 @@ class TransactionController extends Controller {
 			
             foreach ($passengers as $i) {
 
-				$i=explode(": ",$i);//return an array format data
+				$i=explode(": ",$i."");//return an array format data
 ;
                 //find a paticular user
                 $findAccount = \App\User::find((float)$i[1]);
