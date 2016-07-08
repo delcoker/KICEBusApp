@@ -18,7 +18,7 @@ class Roles {
     public function handle($request, Closure $next) {
 
         $user = Auth::user();
-//        dd($user);
+       // dd($user);
         if ($user->role != 'conductor') {
             return response()->json(['status' => 'Unauthorized', 'message' => 'You do not have the permission to view this page'])->setCallback(Input::get('callback'));
         }
