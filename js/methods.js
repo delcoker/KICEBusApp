@@ -24,7 +24,8 @@ var curLat = 100;
 // put an "s" anywhere here if you want the request to go as https
 var http_or_https = "                        ";
 //var ip = "192.168.8.102";
-var ip = "10.10.26.210";
+//var ip = "10.10.26.210";
+var ip = "192.168.100.10";
 
 //var phonegap = "https://10.10.50.37/AshesiBusApp/Api/public/";
 var phonegap = "http" + http_or_https.trim() + "://" + ip + "/AshesiBusApp/Api/public/";
