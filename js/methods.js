@@ -584,9 +584,18 @@ function callbackAjaxSaveSettings(data) {
 function callbackAjaxPay(data) {
     var res = $.parseJSON(data);
     if (!(res.status === "success")) {
-        alert("Payment could not be made, please try again later.");
-        return;
+        alert(res.message);
+
     }
+
+    var failed = "";
+    $.each(res.failed_transactions, function (key, value) {
+        failed += value.name + "\n";
+    });
+
+    alert("Failed Transactions: (Most likely broke) \n" + failed);
+//        return;
+
     passengers_select(res);
 }
 
