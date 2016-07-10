@@ -56,211 +56,215 @@
             </div>
             <!-- - - - - - - - - - - - - - - - - - - - - - - - - - -->
             <div role="main" class="ui-content">
-                <p>Login</p>
+                <form>
+                    <fieldset>
+                        <p>Login</p>
 
-                <div data-role="fieldcontain">
-                    <label for="username">Username :</label>
-                    <input type="text" name="username" id="username" placeholder="12342015">
-                    <div> &nbsp; </div>
-                    <label for="password">Password :</label>
-                    <input type="password" name="password" id="password" placeholder="password">
-                    <div> &nbsp; </div>
-                    <div> &nbsp; </div>
+                        <div data-role="fieldcontain">
+                            <label for="username">Username :</label>
+                            <input type="text" name="username" id="username" placeholder="ice.k">
+                            <div> &nbsp; </div>
+                            <label for="password">Password :</label>
+                            <input type="password" name="password" id="password" placeholder="password">
+                            <div> &nbsp; </div>
+                            <div> &nbsp; </div>
 
-                    <label></label>
-                    <input type="text" name="ip" id="ip" placeholder="ip">
-                    <label></label>
-                    <a href="#route_selelct" role="button" class="ui-shadow ui-btn ui-corner-all" data-transition="flip" onclick="login()" >Login</a>
-                    <div> &nbsp; </div><label></label>
+                            <label></label>
+                            <input type="text" name="ip" id="ip" placeholder="ip">
+                            <label></label>
+                            <a href="#route_selelct" role="button" class="ui-shadow ui-btn ui-corner-all" data-transition="flip" onclick="login()" >Login</a>
+                            <div> &nbsp; </div><label></label>
 
-                </div>
-                <!--</form>-->
+                        </div>
+                    </fieldset>
+                </form>
             </div>
-            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - -->
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - -
             <div data-role="footer">
                 <h1>ICE-K Works</h1>
             </div>
         </div>
-        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-        <div data-role="page" data-dialog="false" id="settings_select" data-theme="c">
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+            <div data-role="page" data-dialog="false" id="settings_select" data-theme="c">
 
-            <div data-role="header">
-                <h1>Bus App </h1>
-                <a href="#pageone" data-role="button" data-icon="" data-iconpos="right" class="ui-btn-left"><div class="caretaker_name">Hi </div></a>
-                <a href="#pageone" data-role="button" data-icon="arrow-u" data-iconpos="right" class="ui-btn-right"  onclick="logout()">Logout</a>
-            </div>
-            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - -->
-            <div role="main" class="ui-content">
-                <img src="resources/ash_logo.png" width='128' height="30" alt="" style='float: right'/>
-                <h1>Settings:</h1>
-
-                <h2>Routes</h2><h4 id="selected_route"></h4>
-                <ul data-role="listview" data-inset="true" data-filter="true" id="settings_route">
-                    <li><a href="#route_save" onclick="route_save()">ROUTES</a></li>
-                </ul>
-
-                <h2>Drivers</h2><h4 id="selected_driver"></h4>
-                <ul data-role="listview" data-inset="true" data-filter="true" id="settings_driver">
-                    <li><a href="#driver_save" onclick="driver_save()">DRIVERS</a></li>
-                </ul>
-
-                <h2>Busses</h2><h4 id="selected_bus"></h4>
-                <ul data-role="listview" data-inset="true" data-filter="true" id="settings_bus">
-                    <li><a href="#bus_save" onclick="bus_save()">
-                            <img src='resources/2.jpg' alt=''>
-                            <h2>BUSSES</h2>
-                            <p>Bus 1</p>
-                        </a></li>
-                </ul>
-                <br>
-
-                <a href="#" role="button" class="ui-shadow ui-btn ui-corner-all" data-transition="flip" onclick="settings_save()">Save</a>
-            </div>
-            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-            <div data-role="footer">
-                <div data-role="controlgroup" data-type="horizontal">
-                    <!--<Caption of group:</p>-->
-                    <a href="#" data-icon="arrow-l"  data-role="button" data-rel="back">Go Back</a>
-                    <!--<h1>ICE-K Works</h1>-->
+                <div data-role="header">
+                    <h1>Bus App </h1>
+                    <a href="#pageone" data-role="button" data-icon="" data-iconpos="right" class="ui-btn-left"><div class="caretaker_name">Hi </div></a>
+                    <a href="#pageone" data-role="button" data-icon="arrow-u" data-iconpos="right" class="ui-btn-right"  onclick="logout()">Logout</a>
                 </div>
+                <!-- - - - - - - - - - - - - - - - - - - - - - - - - - -->
+                <div role="main" class="ui-content">
+                    <img src="resources/ash_logo.png" width='128' height="30" alt="" style='float: right'/>
+                    <h1>Settings:</h1>
 
-            </div>
-        </div>
-        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-        <div data-role="page" data-dialog="false" id="route_select" data-theme="c">
+                    <h2>Routes</h2><h4 id="selected_route"></h4>
+                    <ul data-role="listview" data-inset="true" data-filter="true" id="settings_route">
+                        <li><a href="#route_save" onclick="route_save()">ROUTES</a></li>
+                    </ul>
 
-            <div data-role="header">
-                <h1>Bus App </h1>
-                <a href="#pageone" data-role="button" data-icon="" data-iconpos="right" class="ui-btn-left"><div class="caretaker_name">Hi </div></a>
-                <a href="#pageone" data-role="button" data-icon="arrow-u" data-iconpos="right" class="ui-btn-right"  onclick="logout()">Logout</a>
-            </div>
-            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - -->
-            <div role="main" class="ui-content">
-                <img src="resources/ash_logo.png" width='128' height="30" alt="" style='float: right'/>
-                <h1>Route</h1>
+                    <h2>Drivers</h2><h4 id="selected_driver"></h4>
+                    <ul data-role="listview" data-inset="true" data-filter="true" id="settings_driver">
+                        <li><a href="#driver_save" onclick="driver_save()">DRIVERS</a></li>
+                    </ul>
 
-                <ul data-role="listview" data-inset="true" data-filter="true" id="routes">
-                    <li><a href="#driver_select" onclick="driver_select()">ROUTES</a></li>
-                </ul>
-                <!--<a href="#" role="button" class="ui-shadow ui-btn ui-corner-all" data-transition="slidefade" onclick="select_route()" >Start</a>-->
+                    <h2>Busses</h2><h4 id="selected_bus"></h4>
+                    <ul data-role="listview" data-inset="true" data-filter="true" id="settings_bus">
+                        <li><a href="#bus_save" onclick="bus_save()">
+                                <img src='resources/2.jpg' alt=''>
+                                <h2>BUSSES</h2>
+                                <p>Bus 1</p>
+                            </a></li>
+                    </ul>
+                    <br>
 
-            </div>
-            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-            <div data-role="footer">
-                <div data-role="controlgroup" data-type="horizontal">
-                    <!--<Caption of group:</p>-->
-                    <a href="#" data-icon="arrow-l"  data-role="button" data-rel="back">Go Back</a>
-                    <!--<h1>ICE-K Works</h1>-->
+                    <a href="#" role="button" class="ui-shadow ui-btn ui-corner-all" data-transition="flip" onclick="settings_save()">Save</a>
+                </div>
+                <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+                <div data-role="footer">
+                    <div data-role="controlgroup" data-type="horizontal">
+                        <!--<Caption of group:</p>-->
+                        <a href="#" data-icon="arrow-l"  data-role="button" data-rel="back">Go Back</a>
+                        <!--<h1>ICE-K Works</h1>-->
+                    </div>
+
                 </div>
             </div>
-        </div>
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+            <div data-role="page" data-dialog="false" id="route_select" data-theme="c">
 
-        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-        <div data-role="page" id="passengers_select" data-theme="c">
+                <div data-role="header">
+                    <h1>Bus App </h1>
+                    <a href="#pageone" data-role="button" data-icon="" data-iconpos="right" class="ui-btn-left"><div class="caretaker_name">Hi </div></a>
+                    <a href="#pageone" data-role="button" data-icon="arrow-u" data-iconpos="right" class="ui-btn-right"  onclick="logout()">Logout</a>
+                </div>
+                <!-- - - - - - - - - - - - - - - - - - - - - - - - - - -->
+                <div role="main" class="ui-content">
+                    <img src="resources/ash_logo.png" width='128' height="30" alt="" style='float: right'/>
+                    <h1>Route</h1>
 
-            <div data-role="header">
-                <h1>Bus App </h1>
-                <a href="#map-page" data-role="button" data-icon="" data-iconpos="right" class="ui-btn-left"><div class="caretaker_name">Hi </div></a>
-                <a href="#pageone" data-role="button" data-icon="arrow-u" data-iconpos="right" class="ui-btn-right"  onclick="logout()">Logout</a>
-            </div>
-            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - -->
-            <div role="main" class="ui-content">
-                <img src="resources/ash_logo.png" width='128' height="30" alt="" style='float: right'/>
-                <h1>Passengers</h1>
-                <div class="Long"></div>
-                <div class="Lat"></div>
-                <!--sources: http://stackoverflow.com/questions/20432467/jquery-mobile-filtering-a-listview-of-checkboxes-causes-unstyled-checkboxes-to-->
-                <form>
-                    <fieldset data-role="controlgroup" id="passengers" data-filter="true" data-icon="false">
-                        <input type="checkbox" name="itemIds" id="228"/>
+                    <ul data-role="listview" data-inset="true" data-filter="true" id="routes">
+                        <li><a href="#driver_select" onclick="driver_select()">ROUTES</a></li>
+                    </ul>
+                    <!--<a href="#" role="button" class="ui-shadow ui-btn ui-corner-all" data-transition="slidefade" onclick="select_route()" >Start</a>-->
 
-                        <label for="228">Orange </label>
-                        <input type="checkbox" name="itemIds" id="70"/>
-                        <label for="70">Red </label>
-                        <input type="checkbox" name="itemIds" id="71"/>
-                        <label for="71"> Blue  </label>
-                        <input type="checkbox" name="itemIds" id="72"/>
-                        <label for="72"> Purple    </label>
-                    </fieldset>
-                </form>
-                <div> &nbsp; </div><label></label>
-
-
-                <a href="#payment_amount" role="button" class="ui-shadow ui-btn ui-corner-all" data-transition="flip" onclick="payment_amount()">Pay</a>
-
-            </div>
-            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-            <div data-role="footer">
-                <div data-role="controlgroup" data-type="horizontal">
-                    <a href="#" data-icon="arrow-l"  data-role="button" data-rel="back">Go Back</a>
-                    <!--<h1>ICE-K Works</h1>-->
+                </div>
+                <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+                <div data-role="footer">
+                    <div data-role="controlgroup" data-type="horizontal">
+                        <!--<Caption of group:</p>-->
+                        <a href="#" data-icon="arrow-l"  data-role="button" data-rel="back">Go Back</a>
+                        <!--<h1>ICE-K Works</h1>-->
+                    </div>
                 </div>
             </div>
-        </div>
-        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-        <div data-role="page" id="map-page" data-url="map-page"  data-theme="c">
-            <div data-role="header">
-                <h1>Maps</h1>
-                <div class="Long"></div>
-                <div class="Lat"></div>
-            </div>
-            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-            <div role="main" class="ui-content"  id="map-canvas">
-                <!-- map loads here... -->
-            </div>
-            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-            <div data-role="footer" data-position="fixed">
-                <div data-role="controlgroup" data-type="horizontal">
-                    <a href="#" data-icon="arrow-l"  data-role="button" data-rel="back">Go Back</a>
+
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+            <div data-role="page" id="passengers_select" data-theme="c">
+
+                <div data-role="header">
+                    <h1>Bus App </h1>
+                    <a href="#map-page" data-role="button" data-icon="" data-iconpos="right" class="ui-btn-left"><div class="caretaker_name">Hi </div></a>
+                    <a href="#pageone" data-role="button" data-icon="arrow-u" data-iconpos="right" class="ui-btn-right"  onclick="logout()">Logout</a>
                 </div>
-            </div>
-        </div>
+                <!-- - - - - - - - - - - - - - - - - - - - - - - - - - -->
+                <div role="main" class="ui-content">
+                    <img src="resources/ash_logo.png" width='128' height="30" alt="" style='float: right'/>
+                    <h1>Passengers</h1>
+                    <div class="Long"></div>
+                    <div class="Lat"></div>
+                    <!--sources: http://stackoverflow.com/questions/20432467/jquery-mobile-filtering-a-listview-of-checkboxes-causes-unstyled-checkboxes-to-->
+                    <form>
+                        <fieldset data-role="controlgroup" id="passengers" data-filter="true" data-icon="false">
+                            <input type="checkbox" name="itemIds" id="228"/>
 
-        <!--         <div data-role="page" id="map-page" data-url="map-page">
-                 <div data-role="header" data-theme="a">
-                    <h1>Maps</h1>
-                 </div>
-                 <div role="main" class="ui-content" id="map-canvas">
-                    map loads here...
-                 </div>
-              </div>-->
-
-        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-        <div data-role="page" id="payment_amount" data-theme="c">
-
-            <div data-role="header">
-                <h1>Bus App </h1>
-                <a href="#pageone" data-role="button" data-icon="" data-iconpos="right" class="ui-btn-left"><div class="caretaker_name">Hi </div></a>
-                <a href="#pageone" data-role="button" data-icon="arrow-u" data-iconpos="right" class="ui-btn-right"  onclick="logout()">Logout</a>
-            </div>
-            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - -->
-            <div role="main" class="ui-content">
-                <img src="resources/ash_logo.png" width='128' height="30" alt="" style='float: right'/>
-                <h1>Amount</h1>
-
-                <form>
-                    <label for="password">Confirm Amount :</label>
-                    <input type="number" name="amount" step='0.5' id="amount" placeholder="3">
-                    <div> &nbsp; </div>
-
-
-                    <label></label>
-                    <a href="#confirm_payment" role="button" class="ui-shadow ui-btn ui-corner-all" data-transition="flip" onclick="confirm_payment()" >Confirm</a>
+                            <label for="228">Orange </label>
+                            <input type="checkbox" name="itemIds" id="70"/>
+                            <label for="70">Red </label>
+                            <input type="checkbox" name="itemIds" id="71"/>
+                            <label for="71"> Blue  </label>
+                            <input type="checkbox" name="itemIds" id="72"/>
+                            <label for="72"> Purple    </label>
+                        </fieldset>
+                    </form>
                     <div> &nbsp; </div><label></label>
 
-                </form>
 
-            </div>
-            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-            <div data-role="footer">
-                <div data-role="controlgroup" data-type="horizontal">
-                    <a href="#" data-icon="arrow-l"  data-role="button" data-rel="back">Go Back</a>
-                    <!--<h1>ICE-K Works</h1>-->
+                    <a href="#payment_amount" role="button" class="ui-shadow ui-btn ui-corner-all" data-transition="flip" onclick="payment_amount()">Pay</a>
+
+                </div>
+                <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+                <div data-role="footer">
+                    <div data-role="controlgroup" data-type="horizontal">
+                        <a href="#" data-icon="arrow-l"  data-role="button" data-rel="back">Go Back</a>
+                        <!--<h1>ICE-K Works</h1>-->
+                    </div>
                 </div>
             </div>
-        </div>
-        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+            <div data-role="page" id="map-page" data-url="map-page"  data-theme="c">
+                <div data-role="header">
+                    <h1>Maps</h1>
+                    <div class="Long"></div>
+                    <div class="Lat"></div>
+                </div>
+                <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+                <div role="main" class="ui-content"  id="map-canvas">
+                    <!-- map loads here... -->
+                </div>
+                <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+                <div data-role="footer" data-position="fixed">
+                    <div data-role="controlgroup" data-type="horizontal">
+                        <a href="#" data-icon="arrow-l"  data-role="button" data-rel="back">Go Back</a>
+                    </div>
+                </div>
+            </div>
 
+            <!--         <div data-role="page" id="map-page" data-url="map-page">
+                     <div data-role="header" data-theme="a">
+                        <h1>Maps</h1>
+                     </div>
+                     <div role="main" class="ui-content" id="map-canvas">
+                        map loads here...
+                     </div>
+                  </div>-->
+
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+            <div data-role="page" id="payment_amount" data-theme="c">
+
+                <div data-role="header">
+                    <h1>Bus App </h1>
+                    <a href="#pageone" data-role="button" data-icon="" data-iconpos="right" class="ui-btn-left"><div class="caretaker_name">Hi </div></a>
+                    <a href="#pageone" data-role="button" data-icon="arrow-u" data-iconpos="right" class="ui-btn-right"  onclick="logout()">Logout</a>
+                </div>
+                <!-- - - - - - - - - - - - - - - - - - - - - - - - - - -->
+                <div role="main" class="ui-content">
+                    <img src="resources/ash_logo.png" width='128' height="30" alt="" style='float: right'/>
+                    <h1>Amount</h1>
+
+                    <form>
+                        <label for="password">Confirm Amount :</label>
+                        <input type="number" name="amount" step='0.5' id="amount" placeholder="3">
+                        <div> &nbsp; </div>
+
+
+                        <label></label>
+                        <a href="#confirm_payment" role="button" class="ui-shadow ui-btn ui-corner-all" data-transition="flip" onclick="confirm_payment()" >Confirm</a>
+                        <div> &nbsp; </div><label></label>
+
+                    </form>
+
+                </div>
+                <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+                <div data-role="footer">
+                    <div data-role="controlgroup" data-type="horizontal">
+                        <a href="#" data-icon="arrow-l"  data-role="button" data-rel="back">Go Back</a>
+                        <!--<h1>ICE-K Works</h1>-->
+                    </div>
+                </div>
+            </div>
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+        </div>
 
 
     </body>
