@@ -24,7 +24,8 @@ var curLat = 100;
 // put an "s" anywhere here if you want the request to go as https
 var http_or_https = "                        ";
 //var ip = "192.168.8.102";
-var ip = "10.10.26.210";
+//var ip = "10.10.26.210";
+var ip = "192.168.100.10";
 
 //var phonegap = "https://10.10.50.37/AshesiBusApp/Api/public/";
 var phonegap = "http" + http_or_https.trim() + "://" + ip + "/AshesiBusApp/Api/public/";
@@ -36,7 +37,7 @@ $(document).ready(function () {
     $.support.cors = true;
     window.setInterval(function () {
         sendBusXY();
-    }, 30000);
+    }, 60000);
 
 });
 
@@ -161,7 +162,7 @@ function sendBusXY() {
     }
 
 
-    var res = syncAjaxPost(url, {longitude: curLong
+    syncAjaxAddBusLocation(url, {longitude: curLong
         , latitude: curLat
         , bus_id: bus_id
         , route_id: route_id
@@ -402,10 +403,8 @@ function confirm_payment() {
     res.occupants = payers;
 
     var url = phonegap + "transaction";
-    prompt("url", url);
+//    prompt("url", url);
     syncAjaxConfirmPayment(url, res);
-
-    alert(res.message);
 }
 
 function request_routes() {
@@ -454,46 +453,18 @@ function start_lesson() {
 //    window.open("index.html#start_lesson", "_self");
 }
 
-
-//function syncAjaxGet(u, arr) {
-////    alert(arr[0]);
-//    var obj = $.ajax(u, {async: false
-//        , type: 'GET'
-//        , data: arr // {cmd:3} //JSON.stringify(arr)     //  {cmd:3}// ?cmd=3
-////        , dataType: String
-////        , success: callAjaxSuccessful   //            function(data){alert(data);}
-////        , error: errorFunction
-//    });
-//    return $.parseJSON(obj.responseText);
-//}
-
 function syncAjaxGet(u, arr) {
-    var proper;
 //    alert(arr[0]);
     var obj = $.ajax({url: u, async: false
         , type: 'GET'
-//        , jsonp: 'jsonp'
         , crossDomain: true
-        , data: arr // {cmd:3} //JSON.stringify(arr)     //  {cmd:3}// ?cmd=3
+        , data: arr
         , dataType: 'jsonp'
-//        , headers: {"Access-Control-Allow-Origin ": "*"}
-//        , jsonp: "callAjaxSuccessful"
-//        , $.support.cors = true;
         , jsonpCallback: 'callAjaxSuccessful'
-
-//        , complete: function (data) {
-////            console.log($.parseJSON(data));
-//            proper = $.parseJSON(data);
-//            return proper;
-
-//    }
-//        , error: errorFunction
     });
 }
 
 function syncAjaxGetLogin(u, arr) {
-    var proper;
-//    alert(arr[0]);
     var obj = $.ajax({url: u, async: false
         , type: 'GET'
         , crossDomain: true
@@ -504,14 +475,32 @@ function syncAjaxGetLogin(u, arr) {
 }
 
 function syncAjaxSaveSettings(u, arr) {
-//    prompt("url", u);
-//    alert(arr[0]);
     $.ajax({url: u, async: false
         , type: 'GET'
         , crossDomain: true
         , data: arr
         , dataType: 'jsonp'
         , jsonpCallback: 'callbackAjaxSaveSettings'
+    });
+}
+
+function syncAjaxConfirmPayment(u, arr) {
+    $.ajax({url: u, async: false
+        , type: 'GET'
+        , crossDomain: true
+        , data: arr
+        , dataType: 'jsonp'
+        , jsonpCallback: 'callbackAjaxPay'
+    });
+}
+
+function syncAjaxAddBusLocation(u, arr) {
+    $.ajax({url: u, async: false
+        , type: 'GET'
+        , crossDomain: true
+        , data: arr
+        , dataType: 'jsonp'
+        , jsonpCallback: 'callbackAjaxAddBusLocation'
     });
 }
 
@@ -584,17 +573,40 @@ function callbackAjaxLoginSuccessful(data) {
 
 //    prompt("successful ajax call ", data);
 }
-//function callback(data) {
-//    debugger
-//    prompt("successful ajax call ", data);
-//}
 
 function callbackAjaxSaveSettings(data) {
-    var res = (data);
+    var res = $.parseJSON(data);
     if (!(res.status === "success")) {
         alert("Your settings could not be saved. Try at a later time");
     }
     passengers_select(res);
+}
+
+function callbackAjaxPay(data) {
+    var res = $.parseJSON(data);
+    if (!(res.status === "success")) {
+        alert(res.message);
+
+    }
+
+    var failed = "";
+    $.each(res.failed_transactions, function (key, value) {
+        failed += value.name + "\n";
+    });
+
+    alert("Failed Transactions: (Most likely broke) \n" + failed);
+//        return;
+
+    passengers_select(res);
+}
+
+function callbackAjaxAddBusLocation(data) {
+    var res = $.parseJSON(data);
+    if (!(res.status === "success")) {
+        alert("Bus Location Not Added");
+        return;
+    }
+
 }
 
 function errorFunction() {

@@ -130,9 +130,7 @@ class UsersController extends Controller {
         }
 
 
-//        return "\"" + $res_json + "\"";
         return Response::json($res_json)->setCallback(Input::get('callback'));
-//        return $res_json;
     }
 
     public function logout() {
@@ -210,7 +208,7 @@ class UsersController extends Controller {
             $res_json = '{"status":"fail","message":"Unable to save settings. Please  try again."}';
         }
 
-        return Response::json($res_json)->setCallback(Input::get('callback'));
+        return response()->json($res_json)->setCallback(Input::get('callback'));
     }
 
 }
