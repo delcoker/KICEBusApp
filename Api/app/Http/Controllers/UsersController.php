@@ -72,17 +72,35 @@ class UsersController extends Controller {
                                 ->get();
 
 //dd($settings);
+                        $currentTime = Carbon::now();
+                       // $currentTime->gt($second);
+                        if($currentTime->hour < 12){
+                            $startTime = Carbon::now();
+                            $startTime->hour = 5;
+                            $startTime->minute = 00;
+                            $startTime->second = 00;
 
-                        $startTime = Carbon::now();
-                        $startTime->hour = 5;
-                        $startTime->minute = 00;
-                        $startTime->second = 00;
+
+                            $endTime = Carbon::now();
+                            $endTime->hour = 9;
+                            $endTime->minute = 00;
+                            $endTime->second = 00;
+
+                        }
+                        else if ($currentTime->hour > 12){
+                            $startTime = Carbon::now();
+                            $startTime->hour = 17;
+                            $startTime->minute = 00;
+                            $startTime->second = 00;
 
 
-                        $endTime = Carbon::now();
-                        $endTime->hour = 9;
-                        $endTime->minute = 00;
-                        $endTime->second = 00;
+                            $endTime = Carbon::now();
+                            $endTime->hour = 19;
+                            $endTime->minute = 00;
+                            $endTime->second = 00;
+
+                        }
+                       
 
 //get list of unpaid users
                         $unpaidOccupants = User::leftjoin('transactions', 'transactions.occupation_id', '=', 'occupants.id')
@@ -126,16 +144,32 @@ class UsersController extends Controller {
     public function saveSettings() {
         $user = Auth::user();
         $data = Input::get();
-        $startTime = Carbon::now();
-        $startTime->hour = 5;
-        $startTime->minute = 00;
-        $startTime->second = 00;
-
-
         $endTime = Carbon::now();
-        $endTime->hour = 9;
-        $endTime->minute = 00;
-        $endTime->second = 00;
+        $startTime=Carbon::now();
+        $currentTime = Carbon::now();
+       // $currentTime->gt($second);
+        if($currentTime->hour < 12){
+            
+            $startTime->hour = 5;
+            $startTime->minute = 00;
+            $startTime->second = 00;
+
+            $endTime->hour = 9;
+            $endTime->minute = 00;
+            $endTime->second = 00;
+
+        }
+        else if ($currentTime->hour > 12){
+            
+            $startTime->hour = 17;
+            $startTime->minute = 00;
+            $startTime->second = 00;
+
+            $endTime->hour = 19;
+            $endTime->minute = 00;
+            $endTime->second = 00;
+
+        }
 
         $routes = Routes::all();
         $drivers = Drivers::all();
