@@ -43,9 +43,13 @@ $(document).ready(function () {
 
 function login() {
 
+    if ($("#ip").val().length > 2) {
+        ip = $("#ip").val();
+        phonegap = "https" + http_or_https.trim() + "://" + ip + "/AshesiBusApp/Api/public/";
+    }
+
     var username = $("#username").val();
     var password = $("#password").val();
-//    phonegap = "http://" + $("#ip").val() + "/AshesiBusApp/Api/public/";
     var url = phonegap + "login";
 
     var res = syncAjaxGetLogin(url, {username: username, password: password});
