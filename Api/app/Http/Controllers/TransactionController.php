@@ -35,19 +35,13 @@ class TransactionController extends Controller {
 
             //Get list of occupants to proceed with transaction
             $passengers = $request->occupants;
-            //dd($passengers);
-            //$passengersData = json_decode($passengers);
-            //$passengersData = json_decode($passengers);
-            //dd($passengers);
 
 
             foreach ($passengers as $i) {
+                $i = explode(": ", $i); //return an array format data
+                
+                $findAccount = \App\User::find((float) $i[1]);
 
-                // $i = explode(": ", $i); //return an array format data
-                //find a paticular user
-                $findAccount = \App\User::find((float) $i['occupant_id']);
-
-                //       dd($findAccount->balance);
                 //checks if a user has a minimum balance
                 if ($findAccount['balance'] > (float) $request->amount) {
                     //reduce and update new balance
