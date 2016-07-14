@@ -21,14 +21,14 @@ var all_drivers = {};
 var curLong = 200;
 var curLat = 100;
 
-// put an "s" anywhere here if you want the request to go as https
-var http_or_https = "                        ";
-//var ip = "192.168.8.102";     //  Home
-var ip = "10.10.26.210";      //  School
-//var ip = "192.168.100.10";    //  Apa
+
+var http_or_https = "        s               ";                 // insert an "s" anywhere here if you want the request to go as https
+//var ip = "192.168.8.102";                                     //  Home
+var ip = "10.10.26.210";                                        //  School
+//var ip = "192.168.100.10";                                    //  Apa
 
 //var phonegap = "https://10.10.50.37/AshesiBusApp/Api/public/";
-var phonegap = "https" + http_or_https.trim() + "://" + ip + "/AshesiBusApp/Api/public/";
+var phonegap = "http" + http_or_https.trim() + "://" + ip + "/AshesiBusApp/Api/public/";
 //var phonegap = "http://localhost/AshesiBusApp/Api/public/";
 
 
@@ -594,9 +594,10 @@ function callbackAjaxPay(data) {
     }
 
     var failed = "";
-    $.each(res.failed_transactions, function (key, value) {
-        failed += value.name + "\n";
-    });
+    if (res.failed_transactions !== null)
+        $.each(res.failed_transactions, function (key, value) {
+            failed += value.name + "\n";
+        });
 
     alert("Failed Transactions: (Most likely broke) \n" + failed);
 //        return;
