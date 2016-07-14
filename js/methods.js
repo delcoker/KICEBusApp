@@ -345,26 +345,27 @@ function passengers_select(res) {
 
 //****************
 
-    res.unpaidCustomers.sort(sort_by('name', 0, function (a) {
-        return a.toUpperCase();
-    }));
+    if (res.unpaidCustomers.length > 0)
+        res.unpaidCustomers.sort(sort_by('name', 0, function (a) {
+            return a.toUpperCase();
+        }));
     if (!(res.status === 'success')) {
 
         alert('Failed to login');
         return;
     }
     var listings = '<fieldset data-role="controlgroup" id="passengers" data-filter="true" data-icon="false">';
-
-    $.each(res.unpaidCustomers, function (key, value) {
-        listings += '<input type="checkbox" class="passengers_checkbox" name="passengers_checkbox" id="' + value.id + '"/>';
-        listings += '<label for="' + value.id + '">';
-        listings += '<span style="display: inline-block;" >';
-        listings += "<span><img src='" + 'resources/2.jpg' + "' alt='' width='40' height='40'>";
-        listings += "<span style='float:right; margin-left:10px'><div> " + value.name + "<br>";
-        listings += "" + value.balance + "</div> </span> </span>  ";
-        listings += "</span>";
-        listings += '</label>';
-    });
+    if (res.unpaidCustomers.length > 0)
+        $.each(res.unpaidCustomers, function (key, value) {
+            listings += '<input type="checkbox" class="passengers_checkbox" name="passengers_checkbox" id="' + value.id + '"/>';
+            listings += '<label for="' + value.id + '">';
+            listings += '<span style="display: inline-block;" >';
+            listings += "<span><img src='" + 'resources/2.jpg' + "' alt='' width='40' height='40'>";
+            listings += "<span style='float:right; margin-left:10px'><div> " + value.name + "<br>";
+            listings += "" + value.balance + "</div> </span> </span>  ";
+            listings += "</span>";
+            listings += '</label>';
+        });
     listings += '</fieldset>';
     $("#passengers").replaceWith(listings);
     $('#passengers').controlgroup().controlgroup('refresh');
@@ -372,6 +373,26 @@ function passengers_select(res) {
 }
 
 function payment_amount() {
+
+
+    var payers = [];
+    $('input[type="checkbox"]').filter('.passengers_checkbox').each(function () {
+        var id = $(this).attr('id');
+        if ($(this).is(':checked')) {
+            // perform operation for checked
+//            alert(id);
+            payers.push({occupant_id: id});
+        }
+        else {
+            // perform operation for unchecked
+        }
+    });
+
+    if (payers.length < 1) {
+        alert("No one has been selected");
+        return;
+    }
+
     window.open("index.html#payment_amount", "_self");
 }
 
@@ -405,6 +426,11 @@ function confirm_payment() {
         }
     });
     res.occupants = payers;
+
+    if (res.occupants.length < 1) {
+        alert("No one has been selected");
+        return;
+    }
 
     var url = phonegap + "transaction";
 //    prompt("url", url);
@@ -594,14 +620,14 @@ function callbackAjaxPay(data) {
     }
 
     var failed = "";
-    if (res.failed_transactions !== null)
+    if ("failed_transactions" in res) {
         $.each(res.failed_transactions, function (key, value) {
             failed += value.name + "\n";
         });
 
-    alert("Failed Transactions: (Most likely broke) \n" + failed);
+        alert("Failed Transactions: (Most likely broke) \n" + failed);
 //        return;
-
+    }
     passengers_select(res);
 }
 

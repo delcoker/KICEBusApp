@@ -73,44 +73,36 @@ class UsersController extends Controller {
 
 //dd($settings);
                         $currentTime = Carbon::now();
-                       // $currentTime->gt($second);
-                        if($currentTime->hour < 12){
-                            $startTime = Carbon::now();
-                            $startTime->hour = 5;
-                            $startTime->minute = 00;
-                            $startTime->second = 00;
+                        $startTime = Carbon::now();
+//                        $endTime = Carbon::now();
 
-
-                            $endTime = Carbon::now();
-                            $endTime->hour = 9;
-                            $endTime->minute = 00;
-                            $endTime->second = 00;
-
+                        $startTime->hour = 12;
+                        $startTime->minute = 00;
+                        $startTime->second = 00;
+                        // $currentTime->gt($second);
+                        if ($currentTime->hour < 12) {
+                            $unpaidOccupants = DB::select(DB::raw('SELECT distinct `occupants`.`id`, `occupants`.`name` ,`occupants`.`balance` '
+                                                    . 'FROM occupants where occupants.id not in ( SELECT occupation_id from transactions '
+                                                    . 'where date(`transactions`.`created_at`) ="' . Carbon::today()->toDateString() . '" '
+                                                    . 'and transactions.created_at < "' . $startTime . '")'));
+                        } else if ($currentTime->hour >= 12) {
+                            $unpaidOccupants = DB::select(DB::raw('SELECT distinct `occupants`.`id`, `occupants`.`name` ,`occupants`.`balance` '
+                                                    . 'FROM occupants where occupants.id not in ( SELECT occupation_id from transactions '
+                                                    . 'where date(`transactions`.`created_at`) ="' . Carbon::today()->toDateString() . '" '
+                                                    . 'and transactions.created_at > "' . $startTime . '")'));
                         }
-                        else if ($currentTime->hour > 12){
-                            $startTime = Carbon::now();
-                            $startTime->hour = 17;
-                            $startTime->minute = 00;
-                            $startTime->second = 00;
 
-
-                            $endTime = Carbon::now();
-                            $endTime->hour = 19;
-                            $endTime->minute = 00;
-                            $endTime->second = 00;
-
-                        }
-                       
-
+//                        dd($unpaidOccupants);
 //get list of unpaid users
-                        $unpaidOccupants = User::leftjoin('transactions', 'transactions.occupation_id', '=', 'occupants.id')
-                                ->whereNotBetween('transactions.created_at', array($startTime, $endTime))
-                                ->orWhere('transactions.transaction_id', "=", null)
-                                ->select('occupants.id', 'occupants.name', 'occupants.balance')
-                                ->distinct()
-                                ->get();
-
-
+//                        $unpaidOccupants = User::leftjoin('transactions', 'transactions.occupation_id', '=', 'occupants.id')
+//                                ->whereNotBetween('transactions.created_at', array($startTime, $endTime))
+//                                ->whereDate('transactions.created_at', '=', Carbon::today()->toDateString())
+//                                ->orWhere('transactions.transaction_id', "=", null)
+//                                ->select('occupants.id', 'occupants.name', 'occupants.balance')
+//                                ->distinct()
+//                                ->get();
+                        //  -- ocuppant that paid after 12
+                        //dd(DB::getQueryLog($unpaidOccupants));
                         $res_json = '{"status":"success","role":"' . $authenticatedUser->role .
                                 '","username":"' . $authenticatedUser->username .
                                 '","defaultSettings":' . json_encode($settings) .
@@ -142,33 +134,26 @@ class UsersController extends Controller {
     public function saveSettings() {
         $user = Auth::user();
         $data = Input::get();
-        $endTime = Carbon::now();
-        $startTime=Carbon::now();
         $currentTime = Carbon::now();
-       // $currentTime->gt($second);
-        if($currentTime->hour < 12){
-            
-            $startTime->hour = 5;
-            $startTime->minute = 00;
-            $startTime->second = 00;
+        $startTime = Carbon::now();
+//                        $endTime = Carbon::now();
 
-            $endTime->hour = 9;
-            $endTime->minute = 00;
-            $endTime->second = 00;
-
+        $startTime->hour = 12;
+        $startTime->minute = 00;
+        $startTime->second = 00;
+        // $currentTime->gt($second);
+        if ($currentTime->hour < 12) {
+            $unpaidOccupants = DB::select(DB::raw('SELECT distinct `occupants`.`id`, `occupants`.`name` ,`occupants`.`balance` '
+                                    . 'FROM occupants where occupants.id not in ( SELECT occupation_id from transactions '
+                                    . 'where date(`transactions`.`created_at`) ="' . Carbon::today()->toDateString() . '" '
+                                    . 'and transactions.created_at < "' . $startTime . '")'));
+        } else if ($currentTime->hour >= 12) {
+            $unpaidOccupants = DB::select(DB::raw('SELECT distinct `occupants`.`id`, `occupants`.`name` ,`occupants`.`balance` '
+                                    . 'FROM occupants where occupants.id not in ( SELECT occupation_id from transactions '
+                                    . 'where date(`transactions`.`created_at`) ="' . Carbon::today()->toDateString() . '" '
+                                    . 'and transactions.created_at > "' . $startTime . '")'));
         }
-        else if ($currentTime->hour > 12){
-            
-            $startTime->hour = 17;
-            $startTime->minute = 00;
-            $startTime->second = 00;
-
-            $endTime->hour = 19;
-            $endTime->minute = 00;
-            $endTime->second = 00;
-
-        }
-
+        //  dd($startTime);
         $routes = Routes::all();
         $drivers = Drivers::all();
         $buses = Buses::all();
@@ -188,14 +173,8 @@ class UsersController extends Controller {
                     ->join('routes', 'routes.route_id', '=', 'defaultsettings.route_id')
                     ->select('drivers.driver_id', 'drivers.name as driverName', 'routes.route_id', 'routes.name as routeName', 'busses.bus_id', 'busses.name as busName')
                     ->get();
-
-            $unpaidOccupants = User::leftjoin('transactions', 'transactions.occupation_id', '=', 'occupants.id')
-                    ->whereNotBetween('transactions.created_at', array($startTime, $endTime))
-                    ->orWhere('transactions.transaction_id', "=", null)
-                    ->select('occupants.id', 'occupants.name', 'occupants.balance')
-                    ->distinct()
-                    ->get();
-
+            //dd(Carbon::today()->toDateString());
+            // dd($unpaidOccupants);
             $res_json = '{"status":"success","role":"' . $user->role .
                     '","username":"' . $user->username .
                     '","defaultSettings":' . json_encode($settings) .

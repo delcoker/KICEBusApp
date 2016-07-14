@@ -10,7 +10,9 @@
   | and give it the controller to call when that URI is requested.
   |
  */
-
+Event::listen('illuminate.query', function($query) {
+    var_dump($query->sql);
+});
 Route::get('/', function () {
     return view('welcome');
 });
@@ -36,3 +38,5 @@ $router->group(['middleware' => 'auth'], function() {
 
     Route::get('buslocation', array('as' => 'buslocation', 'uses' => 'BusController@addBusLocation'));
 });
+
+

@@ -15,6 +15,7 @@ use App\Buses;
 use App\Drivers;
 use App\DefaultSettings;
 use App\User;
+use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller {
 
@@ -36,14 +37,15 @@ class TransactionController extends Controller {
             //Get list of occupants to proceed with transaction
             $passengers = $request->occupants;
 
+//            dd($passengers);
 
             foreach ($passengers as $i) {
-                $i = explode(": ", $i); //return an array format data
-                
-                $findAccount = \App\User::find((float) $i[1]);
+//                $i = explode(": ", $i); //return an array format data
+
+                $findAccount = \App\User::find((float) $i['occupant_id']);
 
                 //checks if a user has a minimum balance
-                if ($findAccount['balance'] > (float) $request->amount) {
+                if ($findAccount['balance'] >= (float) $request->amount) {
                     //reduce and update new balance
                     $findAccount->balance = $findAccount['balance'] - (float) $request->amount;
                     $findAccount->update();
@@ -70,10 +72,10 @@ class TransactionController extends Controller {
                 $res_json = '{"status":"success","failed_transactions": ' . $res_json . ',' . $this->unpaidCustomers() . '}';
                 //return Response::json($res_json)->setCallback(Input::get('callback'));
             } else {
-                $res_json = json_encode('{"status":"success","message": " All transaction were succesful ",' . $this->unpaidCustomers() . '}');
+                $res_json = ('{"status":"success","message": "All transaction were succesful ",' . $this->unpaidCustomers() . '}');
             }
         } else {
-            $res_json = json_encode('{"status":"fail","message":' . $validation->errors() . ',' . $this->unpaidCustomers() . '}');
+            $res_json = ('{"status":"fail","message":' . $validation->errors() . ',' . $this->unpaidCustomers() . '}');
         }
 //        $idrisJSON = $this->unpaidCustomers();
 //
@@ -88,16 +90,16 @@ class TransactionController extends Controller {
     private function unpaidCustomers() {
         $user = Auth::user();
         $data = Input::get();
+
+        $currentTime = Carbon::now();
         $startTime = Carbon::now();
-        $startTime->hour = 5;
+//                        $endTime = Carbon::now();
+
+        $startTime->hour = 12;
         $startTime->minute = 00;
         $startTime->second = 00;
+        // $currentTime->gt($second);
 
-
-        $endTime = Carbon::now();
-        $endTime->hour = 9;
-        $endTime->minute = 00;
-        $endTime->second = 00;
 
         $routes = Routes::all();
         $drivers = Drivers::all();
@@ -119,12 +121,17 @@ class TransactionController extends Controller {
                     ->select('drivers.driver_id', 'drivers.name as driverName', 'routes.route_id', 'routes.name as routeName', 'busses.bus_id', 'busses.name as busName')
                     ->get();
 
-            $unpaidOccupants = User::leftjoin('transactions', 'transactions.occupation_id', '=', 'occupants.id')
-                    ->whereNotBetween('transactions.created_at', array($startTime, $endTime))
-                    ->orWhere('transactions.transaction_id', "=", null)
-                    ->select('occupants.id', 'occupants.name', 'occupants.balance')
-                    ->distinct()
-                    ->get();
+            if ($currentTime->hour < 12) {
+                $unpaidOccupants = DB::select(DB::raw('SELECT distinct `occupants`.`id`, `occupants`.`name` ,`occupants`.`balance` '
+                                        . 'FROM occupants where occupants.id not in ( SELECT occupation_id from transactions '
+                                        . 'where date(`transactions`.`created_at`) ="' . Carbon::today()->toDateString() . '" '
+                                        . 'and transactions.created_at < "' . $startTime . '")'));
+            } else if ($currentTime->hour >= 12) {
+                $unpaidOccupants = DB::select(DB::raw('SELECT distinct `occupants`.`id`, `occupants`.`name` ,`occupants`.`balance` '
+                                        . 'FROM occupants where occupants.id not in ( SELECT occupation_id from transactions '
+                                        . 'where date(`transactions`.`created_at`) ="' . Carbon::today()->toDateString() . '" '
+                                        . 'and transactions.created_at > "' . $startTime . '")'));
+            }
 
             $res_json = '' .
                     '"username":"' . $user->username .
