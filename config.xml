@@ -20,5 +20,7 @@
     <allow-navigation href="*"/>
     <allow-intent href="*"/>
     <access origin="*"/>
-    <gap:splash src="splash.png"/>
+    <feature name="Geolocation">
+        <param name="android-package" value="org.apache.cordova.geolocation.GeoBroker" />
+    </feature>
 </widget>
