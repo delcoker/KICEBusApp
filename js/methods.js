@@ -45,7 +45,7 @@ function login() {
 
     if ($("#ip").val().length > 2) {
         ip = $("#ip").val();
-        phonegap = "https" + http_or_https.trim() + "://" + ip + "/AshesiBusApp/Api/public/";
+        phonegap = "http" + http_or_https.trim() + "://" + ip + "/AshesiBusApp/Api/public/";
         prompt("url", phonegap);
     }
 
