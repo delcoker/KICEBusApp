@@ -18,7 +18,7 @@
     <gap:plugin name="com.phonegap.plugins.barcodescanner" version="2.2.0"/>
     <gap:plugin name="cordova-plugin-whitelist" source="npm"/>
     <gap:plugin name="org.apache.cordova.geolocation" source="pgb" />
-    <plugin name="cordova-background-geolocation-lt" source="npm" />
+    <gap:plugin name="org.transistorsoft.cordova.background-geolocation" spec="0.3.5" source="pgb" />
     <allow-navigation href="*"/>
     <allow-intent href="*"/>
     <access origin="*"/>
