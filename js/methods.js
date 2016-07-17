@@ -54,90 +54,19 @@ function login() {
     var url = phonegap + "login";
 
     var res = syncAjaxGetLogin(url, {username: username, password: password});
-
-    {
-//    dummy data
-//    var res = {status: "success", role: "conductor",
-
-//        routes: [{"id": "1", "name": "ctk-aburi"}, {"id": "2", "name": "atomic-abom"}],
-//        drivers: [{"id": "1", "name": "Peter Chek"}, {"id": "2", "name": "Esi Ansah"}],
-//        busses: [{"id": "1", "name": "30 Seater Blue", "plate": "GT9344", "capacity": "30"},
-//            {"id": "4", "name": "10 Seater White", "plate": "GHS44", "capacity": "10"},
-//            {"id": "6", "name": "30 Seater Green", "plate": "ASH02", "capacity": "30"}],
-
-//        default_settings: {route_id: 0, driver_id: 0, bus_id: 0, first_time: true}};
-
-//****************
-
-//    if (!(res.status === 'success')) {
-//
-//        alert(res.message);
-//        return;
-//    }
-//    if (res.defaultSettings.first_time) {
-//// load routes
-//        res.routes.sort(sort_by('name', false, function (a) {
-//            return a.toUpperCase();
-//        }));
-//        all_routes = res.routes;
-//        var listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_route">';
-//        $.each(res.routes, function (key, value) {
-//            listings += '<li><a href="#route_save" onclick="route_save(' + value.route_id + ')">';
-//            listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
-//            listings += "<h2>" + value.name + "</h2>";
-//            listings += "<p>" + value.name + "</p>";
-//            listings += '</a></li> ';
-//        });
-//        listings += '</ul>';
-//        $("#settings_route").replaceWith(listings);
-//        $('#settings_route').listview().listview('refresh');
-//        // load drivers
-//
-//        all_drivers = res.drivers;
-//        res.drivers.sort(sort_by('name', false, function (a) {
-//            return a.toUpperCase();
-//        }));
-//        $.each(res.drivers, function (key, value) {
-//            listings += '<li><a href="#driver_save" onclick="driver_save(' + value.driver_id + ')">';
-//            listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
-//            listings += "<h2>" + value.name + "</h2>";
-//            listings += "<p>" + value.name + "</p>";
-//            listings += '</a></li> ';
-//        });
-//        listings += '</ul>';
-//        $("#settings_driver").replaceWith(listings);
-//        $('#settings_driver').listview().listview('refresh');
-//        // load busses
-//
-//        res.buses.sort(sort_by('name', false, function (a) {
-//            return a.toUpperCase();
-//        }));
-//        all_busses = res.buses;
-//        var listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_bus">';
-//
-//        $.each(res.buses, function (key, value) {
-//
-//            listings += '<li><a href="#bus_save" onclick="bus_save(' + value.bus_id + ')">';
-//            listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
-//            listings += "<h2>" + value.name + "</h2>";
-//            listings += "<p>" + value.name + "</p>";
-//            listings += '</a></li> ';
-//        });
-//        listings += '</ul>';
-//        $("#settings_bus").replaceWith(listings);
-//        $('#settings_bus').listview().listview('refresh');
-//        window.open("index.html#settings_select", "_self");
-//    }
-//    else {
-//        passengers_select(res);
-//    }
-    }
 }
 
 function sendBusXY() {
+
+    var options = {
+        enableHighAccuracy: true,
+//        timeout: 5000,
+        maximumAge: 0
+    };
+
     var Geo = {};
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(success, error);
+        navigator.geolocation.getCurrentPosition(success, error, options);
     }
 
     //Get the latitude and the longitude;
@@ -177,8 +106,9 @@ function sendBusXY() {
 }
 
 $(document).on("pageshow", "#map-page", function () {
-//    sendBusXY();
-    var defaultLatLng = new google.maps.LatLng(5.6037168, -0.1869644); // Default to Hollywood, CA when no geolocation support
+
+////    sendBusXY();
+    var defaultLatLng = new google.maps.LatLng(4.6037168, -0.7869644); // Default to Hollywood, CA when no geolocation support
     if (navigator.geolocation) {
         function success(pos) {
             // Location found, show map with these coordinates
@@ -192,6 +122,7 @@ $(document).on("pageshow", "#map-page", function () {
     } else {
         drawMap(defaultLatLng); // No geolocation support, show default map
     }
+
     function drawMap(latlng) {
         var myOptions = {
             zoom: 15,
