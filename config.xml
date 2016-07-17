@@ -18,7 +18,7 @@
     <gap:plugin name="com.phonegap.plugins.barcodescanner" version="2.2.0"/>
     <gap:plugin name="cordova-plugin-whitelist" source="npm"/>
     <gap:plugin name="org.transistorsoft.cordova.background-geolocation" source="pgb" /> <!--    run geolocation even in background-->
-    <gap:plugin name="nl.x-services.plugins.insomnia" spec="4.0.1" source="pgb" />  <!--prevents screen from going to sleep-->
+    <gap:plugin name="cordova-plugin-insomnia" source="npm" />  <!--prevents screen from going to sleep-->
     <gap:plugin name="com.red_folder.phonegap.plugin.backgroundservice" source="pgb" />
     <allow-navigation href="*"/>
     <allow-intent href="*"/>
