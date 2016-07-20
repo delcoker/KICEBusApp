@@ -66,7 +66,7 @@ function sendBusXY() {
 
     var Geo = {};
     if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(success, error, options);
+        navigator.geolocation.getCurrentPosition(success, error, options);
     }
 
     //Get the latitude and the longitude;
