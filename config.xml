@@ -17,7 +17,9 @@
     <gap:splash src="splash.png"/>
     <gap:plugin name="com.phonegap.plugins.barcodescanner" version="2.2.0"/>
     <gap:plugin name="cordova-plugin-whitelist" source="npm"/>
-    <gap:plugin name="cordova-plugin-insomnia" source="npm" />  <!--prevents screen from going to sleep-->
+    <plugin name="nl.x-services.plugins.insomnia" source="pgb" />
+
+    <!--<gap:plugin name="cordova-plugin-insomnia" source="npm" />  prevents screen from going to sleep didnt work-->
     <!--<gap:plugin name="cordova.plugins.diagnostic" source="npm" />-->
     <!--<gap:plugin name="cordova-plugin-request-location-accuracy" source="npm" />  doesnt work-->
     <!--<gap:plugin name="cordova-plugin-mauron85-background-geolocation-phonegapbuild" source="npm"/>  doedsnt work-->
