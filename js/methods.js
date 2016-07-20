@@ -118,7 +118,7 @@ $(document).on("pageshow", "#map-page", function () {
             drawMap(defaultLatLng); // Failed to find location, show default map
         }
         // Find the users current position.  Cache the location for 5 minutes, timeout after 6 seconds
-        navigator.geolocation.getCurrentPosition(success, fail, {maximumAge: 500000, enableHighAccuracy: true, timeout: 6000});
+        navigator.geolocation.getCurrentPosition(fail, fail, {maximumAge: 500000, enableHighAccuracy: true, timeout: 6000});
     } else {
         drawMap(defaultLatLng); // No geolocation support, show default map
     }
