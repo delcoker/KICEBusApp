@@ -146,10 +146,11 @@ $(document).on("pageshow", "#map-page", function () {
             }
         }
 
-//        google.maps.event.addListener(map, 'click', function (me) {
+        google.maps.event.addListener(map, 'click', function (me) {
+            moveMarker();
 //            var result = [me.latLng.lat(), me.latLng.lng()];
 //            transition(result);
-//        });
+        });
 
         function moveMarker() {
             var latlng = new google.maps.LatLng(curLong, curLat);
