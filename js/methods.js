@@ -54,6 +54,7 @@ function login() {
     var url = phonegap + "login";
 
     var res = syncAjaxGetLogin(url, {username: username, password: password});
+    window.plugins.insomnia.keepAwake();
 }
 
 function sendBusXY() {
