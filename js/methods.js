@@ -106,9 +106,9 @@ function sendBusXY() {
 
 }
 
-$(document).on("pageshow", "#map-page", function () {
 
-////    sendBusXY();
+function initialize() {
+
     var defaultLatLng = new google.maps.LatLng(4.6037168, -0.7869644); // Default to Hollywood, CA when no geolocation support
     if (navigator.geolocation) {
         function success(pos) {
@@ -147,24 +147,35 @@ $(document).on("pageshow", "#map-page", function () {
             }
         }
 
-        google.maps.event.addListener(map, 'click', function (me) {
-            moveMarker();
-//            var result = [me.latLng.lat(), me.latLng.lng()];
-//            transition(result);
-        });
+        setInterval(function () {
+            navigator.geolocation.getCurrentPosition(updateCenter);
+        }, 15000);
 
-        function moveMarker() {
-            var latlng = new google.maps.LatLng(curLong, curLat);
-            marker.setPosition(latlng);
-//            if (i != numDeltas) {
-//                i++;
-//                setTimeout(moveMarker, delay);
-//            }
-        }
+//        google.maps.event.addListener(map, 'click', function (me) {
+//            moveMarker();
+////            var result = [me.latLng.lat(), me.latLng.lng()];
+////            transition(result);
+//        });
+//
+//        function moveMarker() {
+//            var latlng = new google.maps.LatLng(curLong, curLat);
+//            marker.setPosition(latlng);
+////            if (i != numDeltas) {
+////                i++;
+////                setTimeout(moveMarker, delay);
+////            }
+//        }
     }
+}
+var marker, map;
+function updateCenter(position) {
+    // The position getCurrentPosition passes, IS NOT a google.maps.LatLng object. First, we need to convert it:
+    var mapCenter = new google.maps.LatLng(position.latitude, position.longitude);
 
-
-});
+    // Update stuff, instead of reinitializing
+    marker.setPosition(mapCenter);
+    map.setCenter(mapCenter);
+}
 
 function route_save(id) {
 
