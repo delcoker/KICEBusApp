@@ -23,28 +23,6 @@
         <link href="css/delcss.css" rel="stylesheet" type="text/css"/>
         <!-- (End) Add jQuery UI Touch Punch -->
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEuD64KmpejqQq0avl0ZRG6GKUUIGa4Dc" type="text/javascript"></script>
-        <script>
-//            sources: http://forresst.github.io/2012/06/22/Make-a-list-jQuery-Mobile-sortable-by-drag-and-drop/
-//            $(document).bind('pageinit', function () {
-//                $("#settings_route").sortable();
-//                $("#settings_route").disableSelection();
-//                $("#settings_route").bind("sortstop", function (event, ui) {
-//                    $('#settings_route').listview('refresh');
-//                });
-//
-//                $("#settings_driver").sortable();
-//                $("#settings_driver").disableSelection();
-//                $("#settings_driver").bind("sortstop", function (event, ui) {
-//                    $('#settings_driver').listview('refresh');
-//                });
-//
-//                $("#settings_bus").sortable();
-//                $("#settings_bus").disableSelection();
-//                $("#settings_bus").bind("sortstop", function (event, ui) {
-//                    $('#settings_bus').listview('refresh');
-//                });
-//            });
-        </script>
         <!-- (End) Add the features of jQuery UI sortable -->
         <script src="js/methods.js" type="text/javascript"></script>
         <meta name="viewport" content="width-device-width, initial-scale=1">
@@ -75,9 +53,9 @@
                             <label></label><div> &nbsp; </div><label></label>
                             <a href="#route_selelct" role="button" class="ui-shadow ui-btn ui-corner-all" data-transition="flip" onclick="login()" >Login</a>
                             <div> &nbsp; </div><label></label>
-                            <button onclick="">keep awake</button>
-                            <div> &nbsp; </div><label></label>
-                            <button onclick="window.plugins.insomnia.allowSleepAgain()">allow sleep again</button>
+                            <!--                            <button onclick="">keep awake</button>
+                                                        <div> &nbsp; </div><label></label>
+                                                        <button onclick="window.plugins.insomnia.allowSleepAgain()">allow sleep again</button>-->
                         </div>
                     </fieldset>
                 </form>
@@ -167,7 +145,7 @@
 
             <div data-role="header">
                 <h1>Bus App </h1>
-                <a href="#map-page" data-role="button" data-icon="" data-iconpos="right" class="ui-btn-left"><div class="caretaker_name" onclick="initialize()">Hi </div></a>
+                <a href="#map-page" data-role="button" data-icon="" data-iconpos="right" class="ui-btn-left"><div class="" onclick="initLocationProcedure()">Hi </div></a>
                 <a href="#pageone" data-role="button" data-icon="arrow-u" data-iconpos="right" class="ui-btn-right"  onclick="logout()">Logout</a>
             </div>
             <!-- - - - - - - - - - - - - - - - - - - - - - - - - - -->

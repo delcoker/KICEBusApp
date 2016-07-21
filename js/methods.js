@@ -23,8 +23,8 @@ var curLat = 100;
 
 
 var http_or_https = "        s               ";                 // insert an "s" anywhere here if you want the request to go as https
-//var ip = "192.168.8.102";                                     //  Home
-var ip = "10.10.26.210";                                        //  School
+var ip = "192.168.8.101";                                     //  Home
+//var ip = "10.10.26.210";                                        //  School
 //var ip = "192.168.100.10";                                    //  Apa
 
 //var phonegap = "https://10.10.50.37/AshesiBusApp/Api/public/";
@@ -54,12 +54,7 @@ function login() {
     var url = phonegap + "login";
 
     var res = syncAjaxGetLogin(url, {username: username, password: password});
-    try {
-        window.plugins.insomnia.keepAwake();
-    }
-    catch (e) {
-
-    }
+    window.plugins.insomnia.keepAwake();
 }
 
 function sendBusXY() {
@@ -111,10 +106,10 @@ function sendBusXY() {
 
 }
 
-
-function initialize() {
-
+function initLocationProcedure() {
     var defaultLatLng = new google.maps.LatLng(4.6037168, -0.7869644); // Default to Hollywood, CA when no geolocation support
+
+////    sendBusXY();
     if (navigator.geolocation) {
         function success(pos) {
             // Location found, show map with these coordinates
@@ -152,34 +147,23 @@ function initialize() {
             }
         }
 
-        setInterval(function () {
-            navigator.geolocation.getCurrentPosition(updateCenter);
-        }, 15000);
+        google.maps.event.addListener(map, 'click', function (me) {
+            moveMarker();
+//            var result = [me.latLng.lat(), me.latLng.lng()];
+//            transition(result);
+        });
 
-//        google.maps.event.addListener(map, 'click', function (me) {
-//            moveMarker();
-////            var result = [me.latLng.lat(), me.latLng.lng()];
-////            transition(result);
-//        });
-//
-//        function moveMarker() {
-//            var latlng = new google.maps.LatLng(curLong, curLat);
-//            marker.setPosition(latlng);
-////            if (i != numDeltas) {
-////                i++;
-////                setTimeout(moveMarker, delay);
-////            }
-//        }
+        function moveMarker() {
+            var latlng = new google.maps.LatLng(curLong, curLat);
+            marker.setPosition(latlng);
+//            if (i != numDeltas) {
+//                i++;
+//                setTimeout(moveMarker, delay);
+//            }
+        }
     }
-}
-var marker, map;
-function updateCenter(position) {
-    // The position getCurrentPosition passes, IS NOT a google.maps.LatLng object. First, we need to convert it:
-    var mapCenter = new google.maps.LatLng(position.latitude, position.longitude);
 
-    // Update stuff, instead of reinitializing
-    marker.setPosition(mapCenter);
-    map.setCenter(mapCenter);
+
 }
 
 function route_save(id) {
