@@ -118,7 +118,7 @@ $(document).on("pageshow", "#map-page", function () {
             drawMap(defaultLatLng); // Failed to find location, show default map
         }
         // Find the users current position.  Cache the location for 5 minutes, timeout after 6 seconds
-        navigator.geolocation.getCurrentPosition(success, fail, {maximumAge: 500000, enableHighAccuracy: true, timeout: 6000});
+        navigator.geolocation.watchPosition(success, fail, {maximumAge: 500000, enableHighAccuracy: true, timeout: 6000});
     } else {
         drawMap(defaultLatLng); // No geolocation support, show default map
     }
@@ -134,9 +134,34 @@ $(document).on("pageshow", "#map-page", function () {
         var marker = new google.maps.Marker({
             position: latlng,
             map: map,
-            title: "Greetings!"
+            title: "The Bus!"
         });
+        marker.addListener('click', toggleBounce);
+
+        function toggleBounce() {
+            if (marker.getAnimation() !== null) {
+                marker.setAnimation(null);
+            } else {
+                marker.setAnimation(google.maps.Animation.BOUNCE);
+            }
+        }
+
+        google.maps.event.addListener(map, 'click', function (me) {
+            var result = [me.latLng.lat(), me.latLng.lng()];
+            transition(result);
+        });
+
+        function moveMarker() {
+            var latlng = new google.maps.LatLng(curLong, curLat);
+            marker.setPosition(latlng);
+//            if (i != numDeltas) {
+//                i++;
+//                setTimeout(moveMarker, delay);
+//            }
+        }
     }
+
+
 });
 
 function route_save(id) {
