@@ -106,19 +106,20 @@ function sendBusXY() {
 
 }
 
-function initLocationProcedure() {
+//function initLocationProcedure() {
+$(document).on("pageshow", "#map-page", function () {
     var defaultLatLng = new google.maps.LatLng(4.6037168, -0.7869644); // Default to Hollywood, CA when no geolocation support
 
 ////    sendBusXY();
     if (navigator.geolocation) {
         function success(pos) {
-            // Location found, show map with these coordinates
+// Location found, show map with these coordinates
             drawMap(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
         }
         function fail(error) {
             drawMap(defaultLatLng); // Failed to find location, show default map
         }
-        // Find the users current position.  Cache the location for 5 minutes, timeout after 6 seconds
+// Find the users current position.  Cache the location for 5 minutes, timeout after 6 seconds
         navigator.geolocation.getCurrentPosition(success, fail, {maximumAge: 500000, enableHighAccuracy: true, timeout: 6000});
     } else {
         drawMap(defaultLatLng); // No geolocation support, show default map
@@ -135,10 +136,9 @@ function initLocationProcedure() {
         var marker = new google.maps.Marker({
             position: latlng,
             map: map,
-            title: "The Bus!"
+            title: "Greetings!"
         });
         marker.addListener('click', toggleBounce);
-
         function toggleBounce() {
             if (marker.getAnimation() !== null) {
                 marker.setAnimation(null);
@@ -152,7 +152,6 @@ function initLocationProcedure() {
 //            var result = [me.latLng.lat(), me.latLng.lng()];
 //            transition(result);
         });
-
         function moveMarker() {
             var latlng = new google.maps.LatLng(curLong, curLat);
             marker.setPosition(latlng);
@@ -163,8 +162,8 @@ function initLocationProcedure() {
         }
     }
 
-
-}
+});
+//}
 
 function route_save(id) {
 
@@ -301,7 +300,6 @@ function passengers_select(res) {
     bus_id = res.defaultSettings[0].bus_id;
     driver_id = res.defaultSettings[0].driver_id;
     route_id = res.defaultSettings[0].route_id;
-
 //****************
 
     if (res.unpaidCustomers.length > 0)
@@ -338,15 +336,14 @@ function payment_amount() {
     $('input[type="checkbox"]').filter('.passengers_checkbox').each(function () {
         var id = $(this).attr('id');
         if ($(this).is(':checked')) {
-            // perform operation for checked
+// perform operation for checked
 //            alert(id);
             payers.push({occupant_id: id});
         }
         else {
-            // perform operation for unchecked
+// perform operation for unchecked
         }
     });
-
     if (payers.length < 1) {
         alert("No one has been selected");
         return;
@@ -376,16 +373,15 @@ function confirm_payment() {
     $('input[type="checkbox"]').filter('.passengers_checkbox').each(function () {
         var id = $(this).attr('id');
         if ($(this).is(':checked')) {
-            // perform operation for checked
+// perform operation for checked
 //            alert(id);
             payers.push({occupant_id: id});
         }
         else {
-            // perform operation for unchecked
+// perform operation for unchecked
         }
     });
     res.occupants = payers;
-
     if (res.occupants.length < 1) {
         alert("No one has been selected");
         return;
@@ -540,9 +536,7 @@ function callbackAjaxLoginSuccessful(data) {
             return a.toUpperCase();
         }));
         all_busses = res.buses;
-
         var bus_listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_bus">';
-
         $.each(res.buses, function (key, value) {
 
             bus_listings += '<li><a href="#bus_save" onclick="bus_save(' + value.bus_id + ')">';
@@ -575,7 +569,6 @@ function callbackAjaxPay(data) {
     var res = $.parseJSON(data);
     if (!(res.status === "success")) {
         alert(res.message);
-
     }
 
     var failed = "";
@@ -583,7 +576,6 @@ function callbackAjaxPay(data) {
         $.each(res.failed_transactions, function (key, value) {
             failed += value.name + "\n";
         });
-
         alert("Failed Transactions: (Most likely broke) \n" + failed);
 //        return;
     }
