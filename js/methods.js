@@ -23,7 +23,7 @@ var curLat = 100;
 
 
 var http_or_https = "        s               ";                 // insert an "s" anywhere here if you want the request to go as https
-var ip = "192.168.8.101";                                     //  Home
+var ip = "192.168.8.102";                                     //  Home
 //var ip = "10.10.26.210";                                        //  School
 //var ip = "192.168.100.10";                                    //  Apa
 
@@ -33,6 +33,7 @@ var phonegap = "http" + http_or_https.trim() + "://" + ip + "/AshesiBusApp/Api/p
 
 
 $(document).ready(function () {
+
     $.mobile.allowCrossDomainPages = true;
     $.support.cors = true;
     window.setInterval(function () {
@@ -54,7 +55,12 @@ function login() {
     var url = phonegap + "login";
 
     var res = syncAjaxGetLogin(url, {username: username, password: password});
-    window.plugins.insomnia.keepAwake();
+    try {
+        window.plugins.insomnia.keepAwake();
+    }
+    catch (e) {
+
+    }
 }
 
 function sendBusXY() {
@@ -92,8 +98,9 @@ function sendBusXY() {
 
     var url = phonegap + 'buslocation';
 
-    if (bus_id === 0 || curLat === 100 || curLong === 200 || curLat === -0.1869644 && curLong === 5.6037168) {
-        return;
+    if (bus_id === 0 || curLat === 100 || curLong === 200 || (curLat === -0.1869644 && curLong === 5.6037168)) {
+        console.log("defaults");
+//        return;
     }
 
 
@@ -106,64 +113,94 @@ function sendBusXY() {
 
 }
 
+
 //function initLocationProcedure() {
 $(document).on("pageshow", "#map-page", function () {
-    var defaultLatLng = new google.maps.LatLng(4.6037168, -0.7869644); // Default to Hollywood, CA when no geolocation support
 
-////    sendBusXY();
-    if (navigator.geolocation) {
-        function success(pos) {
-// Location found, show map with these coordinates
-            drawMap(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
-        }
-        function fail(error) {
-            drawMap(defaultLatLng); // Failed to find location, show default map
-        }
-// Find the users current position.  Cache the location for 5 minutes, timeout after 6 seconds
-        navigator.geolocation.getCurrentPosition(success, fail, {maximumAge: 500000, enableHighAccuracy: true, timeout: 6000});
-    } else {
-        drawMap(defaultLatLng); // No geolocation support, show default map
-    }
+    var map,
+            currentPositionMarker,
+            mapCenter = new google.maps.LatLng(4.6037168, -0.7869644),
+            map;
 
-    function drawMap(latlng) {
-        var myOptions = {
+    // you can specify the default lat long
+    initLocationProcedure();
+
+    // change the zoom if you want
+    function initializeMap()
+    {
+        map = new google.maps.Map(document.getElementById('map-canvas'), {
             zoom: 15,
-            center: latlng,
+            center: mapCenter,
             mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
-        // Add an overlay to the map of current lat/lng
-        var marker = new google.maps.Marker({
-            position: latlng,
-            map: map,
-            title: "Greetings!"
         });
-        marker.addListener('click', toggleBounce);
-        function toggleBounce() {
-            if (marker.getAnimation() !== null) {
-                marker.setAnimation(null);
-            } else {
-                marker.setAnimation(google.maps.Animation.BOUNCE);
-            }
-        }
-
-        google.maps.event.addListener(map, 'click', function (me) {
-            moveMarker();
-//            var result = [me.latLng.lat(), me.latLng.lng()];
-//            transition(result);
-        });
-        function moveMarker() {
-            var latlng = new google.maps.LatLng(curLong, curLat);
-            marker.setPosition(latlng);
-//            if (i != numDeltas) {
-//                i++;
-//                setTimeout(moveMarker, delay);
-//            }
-        }
     }
 
+    google.maps.event.addDomListener(window, 'resize', function () {
+        var center = map.getCenter();
+        map.setCenter(center);
+    });
+// And aditionally you can need use "trigger" for real responsive
+    google.maps.event.trigger(map, "resize");
+
+    function locError(error) {
+        // tell the user if the current position could not be located
+        alert("The current position could not be found!");
+    }
+
+    // current position of the user
+    function setCurrentPosition(pos) {
+        currentPositionMarker = new google.maps.Marker({
+            map: map,
+            position: new google.maps.LatLng(
+                    pos.coords.latitude,
+                    pos.coords.longitude
+                    ),
+            title: "Current Position"
+        });
+        map.panTo(new google.maps.LatLng(
+                pos.coords.latitude,
+                pos.coords.longitude
+                ));
+    }
+
+    function displayAndWatch(position) {
+
+        // set current position
+        setCurrentPosition(position);
+
+        // watch position
+        watchCurrentPosition();
+    }
+
+    function watchCurrentPosition() {
+        var positionTimer = navigator.geolocation.watchPosition(
+                function (position) {
+                    setMarkerPosition(
+                            currentPositionMarker,
+                            position
+                            );
+                });
+    }
+
+    function setMarkerPosition(marker, position) {
+        marker.setPosition(
+                new google.maps.LatLng(
+                        position.coords.latitude,
+                        position.coords.longitude)
+                );
+    }
+
+
+    function initLocationProcedure() {
+        initializeMap();
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(displayAndWatch, locError);
+        } else {
+            // tell the user if a browser doesn't support this amazing API
+            alert("Your browser does not support the Geolocation API!");
+        }
+    }
 });
-//}
 
 function route_save(id) {
 
