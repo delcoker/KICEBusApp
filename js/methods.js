@@ -23,12 +23,18 @@ var curLat = 100;
 
 
 var http_or_https = "        s               ";                 // insert an "s" anywhere here if you want the request to go as https
-var ip = "192.168.8.102";                                     //  Home
-//var ip = "10.10.26.210";                                        //  School
+//var ip = "192.168.8.102";                                     //  Home
+var ip = "10.10.26.210";                                        //  School
 //var ip = "192.168.100.10";                                    //  Apa
+//var ip = "166.62.103.147";                                    //  Server
+
+
+// url after domain
+//var afterDomainURL = '/~ashesics/aba/Api/public/index.php/';
+var afterDomainURL = '/AshesiBusApp/Api/public/';
 
 //var phonegap = "https://10.10.50.37/AshesiBusApp/Api/public/";
-var phonegap = "http" + http_or_https.trim() + "://" + ip + "/AshesiBusApp/Api/public/";
+var phonegap = "http" + http_or_https.trim() + "://" + ip + afterDomainURL;
 //var phonegap = "http://localhost/AshesiBusApp/Api/public/";
 
 
@@ -46,7 +52,7 @@ function login() {
 
     if ($("#ip").val().length > 2) {
         ip = $("#ip").val();
-        phonegap = "http" + http_or_https.trim() + "://" + ip + "/AshesiBusApp/Api/public/";
+        phonegap = "http" + http_or_https.trim() + "://" + ip + afterDomainURL;
 //        prompt("url", phonegap);
     }
 
@@ -72,9 +78,9 @@ function sendBusXY() {
     };
 
     var Geo = {};
-    if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(success, error, options);
-    }
+//    if (navigator.geolocation) {
+    navigator.geolocation.watchPosition(success, error, options);
+//    }
 
     //Get the latitude and the longitude;
     function success(position) {
