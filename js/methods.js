@@ -12,117 +12,75 @@ var settings_bus_id = 0;
 var settings_route_id = 0;
 var settings_driver_id = 0;
 
+var callback_results;
 
 var all_routes = {};
 var all_busses = {};
 var all_drivers = {};
 
-var curLong = 0;
-var curLat = 0;
+var curLong = 200;
+var curLat = 100;
+
+
+var http_or_https = "        s               ";                 // insert an "s" anywhere here if you want the request to go as https
+//var ip = "192.168.8.102";                                     //  Home
+//var ip = "10.10.26.210";                                        //  School
+//var ip = "192.168.100.10";                                    //  Apa
+var ip = "166.62.103.147";                                    //  Server
+
+
+// url after domain
+var afterDomainURL = '/~ashesics/aba/Api/public/index.php/';
+//var afterDomainURL = '/AshesiBusApp/Api/public/';
 
 //var phonegap = "https://10.10.50.37/AshesiBusApp/Api/public/";
-var phonegap = "https://192.168.8.102/AshesiBusApp/Api/public/";
+var phonegap = "http" + http_or_https.trim() + "://" + ip + afterDomainURL;
 //var phonegap = "http://localhost/AshesiBusApp/Api/public/";
 
 
 $(document).ready(function () {
+
+    $.mobile.allowCrossDomainPages = true;
+    $.support.cors = true;
     window.setInterval(function () {
         sendBusXY();
-    }, 30000);
+    }, 60000);
 
 });
 
 function login() {
 
+    if ($("#ip").val().length > 2) {
+        ip = $("#ip").val();
+        phonegap = "http" + http_or_https.trim() + "://" + ip + afterDomainURL;
+//        prompt("url", phonegap);
+    }
+
     var username = $("#username").val();
     var password = $("#password").val();
-    phonegap = "https://" + $("#ip").val() + "/AshesiBusApp/Api/public/";
     var url = phonegap + "login";
-    prompt("url", url);
-    var res = syncAjaxPost(url, {username: username, password: password});
-//    dummy data
-//    var res = {status: "success", role: "conductor",
 
-//        routes: [{"id": "1", "name": "ctk-aburi"}, {"id": "2", "name": "atomic-abom"}],
-//        drivers: [{"id": "1", "name": "Peter Chek"}, {"id": "2", "name": "Esi Ansah"}],
-//        busses: [{"id": "1", "name": "30 Seater Blue", "plate": "GT9344", "capacity": "30"},
-//            {"id": "4", "name": "10 Seater White", "plate": "GHS44", "capacity": "10"},
-//            {"id": "6", "name": "30 Seater Green", "plate": "ASH02", "capacity": "30"}],
-
-//        default_settings: {route_id: 0, driver_id: 0, bus_id: 0, first_time: true}};
-
-//****************
-
-    if (!(res.status === 'success')) {
-
-        alert(res.message);
-        return;
+    var res = syncAjaxGetLogin(url, {username: username, password: password});
+    try {
+        window.plugins.insomnia.keepAwake();
     }
-    if (res.defaultSettings.first_time) {
-// load routes
-        res.routes.sort(sort_by('name', false, function (a) {
-            return a.toUpperCase();
-        }));
-        all_routes = res.routes;
-        var listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_route">';
-        $.each(res.routes, function (key, value) {
-            listings += '<li><a href="#route_save" onclick="route_save(' + value.route_id + ')">';
-            listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
-            listings += "<h2>" + value.name + "</h2>";
-            listings += "<p>" + value.name + "</p>";
-            listings += '</a></li> ';
-        });
-        listings += '</ul>';
-        $("#settings_route").replaceWith(listings);
-        $('#settings_route').listview().listview('refresh');
-        // load drivers
+    catch (e) {
 
-        all_drivers = res.drivers;
-        res.drivers.sort(sort_by('name', false, function (a) {
-            return a.toUpperCase();
-        }));
-        var listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_driver">';
-        $.each(res.drivers, function (key, value) {
-            listings += '<li><a href="#driver_save" onclick="driver_save(' + value.driver_id + ')">';
-            listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
-            listings += "<h2>" + value.name + "</h2>";
-            listings += "<p>" + value.name + "</p>";
-            listings += '</a></li> ';
-        });
-        listings += '</ul>';
-        $("#settings_driver").replaceWith(listings);
-        $('#settings_driver').listview().listview('refresh');
-        // load busses
-
-        res.buses.sort(sort_by('name', false, function (a) {
-            return a.toUpperCase();
-        }));
-        all_busses = res.buses;
-        var listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_bus">';
-
-        $.each(res.buses, function (key, value) {
-
-            listings += '<li><a href="#bus_save" onclick="bus_save(' + value.bus_id + ')">';
-            listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
-            listings += "<h2>" + value.name + "</h2>";
-            listings += "<p>" + value.name + "</p>";
-            listings += '</a></li> ';
-        });
-        listings += '</ul>';
-        $("#settings_bus").replaceWith(listings);
-        $('#settings_bus').listview().listview('refresh');
-        window.open("index.html#settings_select", "_self");
-    }
-    else {
-        passengers_select(res);
     }
 }
 
 function sendBusXY() {
+
+    var options = {
+        enableHighAccuracy: true,
+//        timeout: 5000,
+        maximumAge: 0
+    };
+
     var Geo = {};
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(success, error);
-    }
+//    if (navigator.geolocation) {
+    navigator.geolocation.watchPosition(success, error, options);
+//    }
 
     //Get the latitude and the longitude;
     function success(position) {
@@ -142,41 +100,114 @@ function sendBusXY() {
         $('.Long').html(lng);
     }
 
+    var location_name = "unknown but in gh";
+
+    var url = phonegap + 'buslocation';
+
+    if (bus_id === 0 || curLat === 100 || curLong === 200 || (curLat === -0.1869644 && curLong === 5.6037168)) {
+        console.log("defaults");
+//        return;
+    }
+
+
+    syncAjaxAddBusLocation(url, {longitude: curLong
+        , latitude: curLat
+        , bus_id: bus_id
+        , route_id: route_id
+        , name: location_name});
+
 
 }
 
+
+//function initLocationProcedure() {
 $(document).on("pageshow", "#map-page", function () {
-    sendBusXY();
-    var defaultLatLng = new google.maps.LatLng(5.6037168, -0.1869644); // Default to Hollywood, CA when no geolocation support
-    if (navigator.geolocation) {
-        function success(pos) {
-            // Location found, show map with these coordinates
-            drawMap(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
-        }
-        function fail(error) {
-            drawMap(defaultLatLng); // Failed to find location, show default map
-        }
-        // Find the users current position.  Cache the location for 5 minutes, timeout after 6 seconds
-        navigator.geolocation.getCurrentPosition(success, fail, {maximumAge: 500000, enableHighAccuracy: true, timeout: 6000});
-    } else {
-        drawMap(defaultLatLng); // No geolocation support, show default map
-    }
-    function drawMap(latlng) {
-        var myOptions = {
+
+    var map,
+            currentPositionMarker,
+            mapCenter = new google.maps.LatLng(4.6037168, -0.7869644),
+            map;
+
+    // you can specify the default lat long
+    initLocationProcedure();
+
+    // change the zoom if you want
+    function initializeMap()
+    {
+        map = new google.maps.Map(document.getElementById('map-canvas'), {
             zoom: 15,
-            center: latlng,
+            center: mapCenter,
             mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
-        // Add an overlay to the map of current lat/lng
-        var marker = new google.maps.Marker({
-            position: latlng,
-            map: map,
-            title: "Greetings!"
         });
     }
 
+    google.maps.event.addDomListener(window, 'resize', function () {
+        var center = map.getCenter();
+        map.setCenter(center);
+    });
+// And aditionally you can need use "trigger" for real responsive
+    google.maps.event.trigger(map, "resize");
+
+    function locError(error) {
+        // tell the user if the current position could not be located
+        alert("The current position could not be found!");
+    }
+
+    // current position of the user
+    function setCurrentPosition(pos) {
+        currentPositionMarker = new google.maps.Marker({
+            map: map,
+            position: new google.maps.LatLng(
+                    pos.coords.latitude,
+                    pos.coords.longitude
+                    ),
+            title: "Current Position"
+        });
+        map.panTo(new google.maps.LatLng(
+                pos.coords.latitude,
+                pos.coords.longitude
+                ));
+    }
+
+    function displayAndWatch(position) {
+
+        // set current position
+        setCurrentPosition(position);
+
+        // watch position
+        watchCurrentPosition();
+    }
+
+    function watchCurrentPosition() {
+        var positionTimer = navigator.geolocation.watchPosition(
+                function (position) {
+                    setMarkerPosition(
+                            currentPositionMarker,
+                            position
+                            );
+                });
+    }
+
+    function setMarkerPosition(marker, position) {
+        marker.setPosition(
+                new google.maps.LatLng(
+                        position.coords.latitude,
+                        position.coords.longitude)
+                );
+    }
+
+
+    function initLocationProcedure() {
+        initializeMap();
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(displayAndWatch, locError);
+        } else {
+            // tell the user if a browser doesn't support this amazing API
+            alert("Your browser does not support the Geolocation API!");
+        }
+    }
 });
+
 function route_save(id) {
 
     settings_route_id = id;
@@ -202,6 +233,7 @@ function driver_save(id) {
     $('#selected_driver').text("Current Driver: " + curr);
 }
 
+// when
 function bus_save(id) {
     settings_bus_id = id;
     var curr = "";
@@ -234,15 +266,11 @@ function settings_save() {
     }
 
     var url = phonegap + "settings";
-    var res = syncAjaxPost(url, {route_id: settings_route_id,
+    syncAjaxSaveSettings(url, {route_id: settings_route_id,
         driver_id: settings_driver_id,
         bus_id: settings_bus_id});
 //    var res = {status: "success"};
-    if (!(res.status === "success")) {
-        alert("Your settings could not be saved. Try at a later time");
-    }
 
-    passengers_select(res);
 }
 
 function driver_select(id) {
@@ -310,42 +338,34 @@ function bus_select(id) {
     window.open("index.html#bus_select", "_self");
 }
 
-
 function passengers_select(res) {
 
-//    var url = phonegap + "passensgers";
-    //    var res = syncAjaxGet(url, {conductor_id: conductor_id, password: password});
-//  ***************  dummy data
-//    var res = {status: "success", passengers: [{"id": "1", "name": "Joseph Nti", "role": "passenger", "amount_left": "200.50"},
-//            {"id": "2", "name": "Esi Yenuah", "role": "passenger", "amount_left": "323.50"},
-//            {"id": "4", "name": "Iddris Alba", "role": "passenger", "amount_left": "2.50"},
-//            {"id": "5", "name": "Jessica Alba", "role": "passenger", "amount_left": "99.50"},
-//            {"id": "8", "name": "Zul Kyei", "role": "passenger", "amount_left": "100.50"},
-//            {"id": "10", "name": "King Coker", "role": "passenger", "amount_left": "4430.50"}],
-//        default_settings: {route_id: 1, driver_id: 2, bus_id: 3, first_time: false}};
-
+    bus_id = res.defaultSettings[0].bus_id;
+    driver_id = res.defaultSettings[0].driver_id;
+    route_id = res.defaultSettings[0].route_id;
 //****************
 
-    res.unpaidCustomers.sort(sort_by('name', 0, function (a) {
-        return a.toUpperCase();
-    }));
+    if (res.unpaidCustomers.length > 0)
+        res.unpaidCustomers.sort(sort_by('name', 0, function (a) {
+            return a.toUpperCase();
+        }));
     if (!(res.status === 'success')) {
 
         alert('Failed to login');
         return;
     }
     var listings = '<fieldset data-role="controlgroup" id="passengers" data-filter="true" data-icon="false">';
-
-    $.each(res.unpaidCustomers, function (key, value) {
-        listings += '<input type="checkbox" class="passengers_checkbox" name="passengers_checkbox" id="' + value.id + '"/>';
-        listings += '<label for="' + value.id + '">';
-        listings += '<span style="display: inline-block;" >';
-        listings += "<span><img src='" + 'resources/2.jpg' + "' alt='' width='40' height='40'>";
-        listings += "<span style='float:right; margin-left:10px'><div> " + value.name + "<br>";
-        listings += "" + value.balance + "</div> </span> </span>  ";
-        listings += "</span>";
-        listings += '</label>';
-    });
+    if (res.unpaidCustomers.length > 0)
+        $.each(res.unpaidCustomers, function (key, value) {
+            listings += '<input type="checkbox" class="passengers_checkbox" name="passengers_checkbox" id="' + value.id + '"/>';
+            listings += '<label for="' + value.id + '">';
+            listings += '<span style="display: inline-block;" >';
+            listings += "<span><img src='" + 'resources/2.jpg' + "' alt='' width='40' height='40'>";
+            listings += "<span style='float:right; margin-left:10px'><div> " + value.name + "<br>";
+            listings += "" + value.balance + "</div> </span> </span>  ";
+            listings += "</span>";
+            listings += '</label>';
+        });
     listings += '</fieldset>';
     $("#passengers").replaceWith(listings);
     $('#passengers').controlgroup().controlgroup('refresh');
@@ -353,25 +373,66 @@ function passengers_select(res) {
 }
 
 function payment_amount() {
+
+
+    var payers = [];
+    $('input[type="checkbox"]').filter('.passengers_checkbox').each(function () {
+        var id = $(this).attr('id');
+        if ($(this).is(':checked')) {
+// perform operation for checked
+//            alert(id);
+            payers.push({occupant_id: id});
+        }
+        else {
+// perform operation for unchecked
+        }
+    });
+    if (payers.length < 1) {
+        alert("No one has been selected");
+        return;
+    }
+
     window.open("index.html#payment_amount", "_self");
 }
 
 //sources: http://stackoverflow.com/questions/11138898/check-if-a-jquery-mobile-checkbox-is-checked
 function confirm_payment() {
     var amount = $("#amount").val();
-    var payers = [{amount: amount, bus_id: bus_id, driver_id: driver_id, route_id: route_id}];
+    if (amount === "" || amount < 1) {
+        alert("Please enter a value");
+        return;
+    }
+    else if (amount === 0) {
+        alert("Please enter a value");
+    }
+    else if (amount === 0) {
+        alert("Please enter a value");
+    }
+    var res = {amount: amount,
+        bus_id: bus_id,
+        driver_id: driver_id,
+        route_id: route_id};
+    var payers = [];
     $('input[type="checkbox"]').filter('.passengers_checkbox').each(function () {
         var id = $(this).attr('id');
         if ($(this).is(':checked')) {
-            // perform operation for checked
+// perform operation for checked
 //            alert(id);
             payers.push({occupant_id: id});
         }
         else {
-            // perform operation for unchecked
+// perform operation for unchecked
         }
-
     });
+    res.occupants = payers;
+    if (res.occupants.length < 1) {
+        alert("No one has been selected");
+        return;
+    }
+
+    var url = phonegap + "transaction";
+//    prompt("url", url);
+    syncAjaxConfirmPayment(url, res);
 }
 
 function request_routes() {
@@ -420,44 +481,157 @@ function start_lesson() {
 //    window.open("index.html#start_lesson", "_self");
 }
 
-
 function syncAjaxGet(u, arr) {
 //    alert(arr[0]);
-    var obj = $.ajax(u, {async: false
+    var obj = $.ajax({url: u, async: false
         , type: 'GET'
-        , data: arr // {cmd:3} //JSON.stringify(arr)     //  {cmd:3}// ?cmd=3
-//        , dataType: String
-//        , success: callAjaxSuccessful   //            function(data){alert(data);}
-//        , error: errorFunction
-    });
-    return $.parseJSON(obj.responseText);
-}
-
-function asyncAjaxGet(u, arr) {
-//    alert(arr[0]);
-    var obj = $.ajax(u, {async: true
-        , type: 'GET'
-        , data: arr // {cmd:3} //JSON.stringify(arr)     //  {cmd:3}// ?cmd=3
-//        , dataType: String
-        , success: callAjaxSuccessful   //            function(data){alert(data);}
-        , error: errorFunction});
-    return $.parseJSON(obj.responseText);
-}
-
-function syncAjaxPost(u, arr) {
-//    alert(arr[0]);
-    var obj = $.ajax(u, {async: false
-        , type: 'POST'
-        , data: arr // {cmd:3} //JSON.stringify(arr)     //  {cmd:3}// ?cmd=3
         , crossDomain: true
-//        , dataType: String
-        , success: callAjaxSuccessful   //            function(data){alert(data);}
-        , error: errorFunction});
-    return $.parseJSON(obj.responseText);
+        , data: arr
+        , dataType: 'jsonp'
+        , jsonpCallback: 'callAjaxSuccessful'
+    });
 }
 
-function callAjaxSuccessful(data) {
+function syncAjaxGetLogin(u, arr) {
+    var obj = $.ajax({url: u, async: false
+        , type: 'GET'
+        , crossDomain: true
+        , data: arr
+        , dataType: 'jsonp'
+        , jsonpCallback: 'callbackAjaxLoginSuccessful'
+    });
+}
+
+function syncAjaxSaveSettings(u, arr) {
+    $.ajax({url: u, async: false
+        , type: 'GET'
+        , crossDomain: true
+        , data: arr
+        , dataType: 'jsonp'
+        , jsonpCallback: 'callbackAjaxSaveSettings'
+    });
+}
+
+function syncAjaxConfirmPayment(u, arr) {
+    $.ajax({url: u, async: false
+        , type: 'GET'
+        , crossDomain: true
+        , data: arr
+        , dataType: 'jsonp'
+        , jsonpCallback: 'callbackAjaxPay'
+    });
+}
+
+function syncAjaxAddBusLocation(u, arr) {
+    $.ajax({url: u, async: false
+        , type: 'GET'
+        , crossDomain: true
+        , data: arr
+        , dataType: 'jsonp'
+        , jsonpCallback: 'callbackAjaxAddBusLocation'
+    });
+}
+
+function callbackAjaxLoginSuccessful(data) {
+    var res = $.parseJSON(data);
+    if (!(res.status === 'success')) {
+
+        alert(res.message);
+        return;
+    }
+    if (res.defaultSettings.first_time) {
+// load routes
+        res.routes.sort(sort_by('name', false, function (a) {
+            return a.toUpperCase();
+        }));
+        all_routes = res.routes;
+        var route_listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_route">';
+        $.each(res.routes, function (key, value) {
+            route_listings += '<li><a href="#route_save" onclick="route_save(' + value.route_id + ')">';
+            route_listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
+            route_listings += "<h2>" + value.name + "</h2>";
+            route_listings += "<p>" + value.name + "</p>";
+            route_listings += '</a></li> ';
+        });
+        route_listings += '</ul>';
+        $("#settings_route").replaceWith(route_listings);
+        $('#settings_route').listview().listview('refresh');
+        // load drivers
+
+        all_drivers = res.drivers;
+        res.drivers.sort(sort_by('name', false, function (a) {
+            return a.toUpperCase();
+        }));
+        var driver_listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_driver">';
+        $.each(res.drivers, function (key, value) {
+            driver_listings += '<li><a href="#driver_save" onclick="driver_save(' + value.driver_id + ')">';
+            driver_listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
+            driver_listings += "<h2>" + value.name + "</h2>";
+            driver_listings += "<p>" + value.name + "</p>";
+            driver_listings += '</a></li> ';
+        });
+        driver_listings += '</ul>';
+        $("#settings_driver").replaceWith(driver_listings);
+        $('#settings_driver').listview().listview('refresh');
+        // load busses
+
+        res.buses.sort(sort_by('name', false, function (a) {
+            return a.toUpperCase();
+        }));
+        all_busses = res.buses;
+        var bus_listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_bus">';
+        $.each(res.buses, function (key, value) {
+
+            bus_listings += '<li><a href="#bus_save" onclick="bus_save(' + value.bus_id + ')">';
+            bus_listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
+            bus_listings += "<h2>" + value.name + "</h2>";
+            bus_listings += "<p>" + value.name + "</p>";
+            bus_listings += '</a></li> ';
+        });
+        bus_listings += '</ul>';
+        $("#settings_bus").replaceWith(bus_listings);
+        $('#settings_bus').listview().listview('refresh');
+        window.open("index.html#settings_select", "_self");
+    }
+    else {
+        passengers_select(res);
+    }
+
 //    prompt("successful ajax call ", data);
+}
+
+function callbackAjaxSaveSettings(data) {
+    var res = $.parseJSON(data);
+    if (!(res.status === "success")) {
+        alert("Your settings could not be saved. Try at a later time");
+    }
+    passengers_select(res);
+}
+
+function callbackAjaxPay(data) {
+    var res = $.parseJSON(data);
+    if (!(res.status === "success")) {
+        alert(res.message);
+    }
+
+    var failed = "";
+    if ("failed_transactions" in res) {
+        $.each(res.failed_transactions, function (key, value) {
+            failed += value.name + "\n";
+        });
+        alert("Failed Transactions: (Most likely broke) \n" + failed);
+//        return;
+    }
+    passengers_select(res);
+}
+
+function callbackAjaxAddBusLocation(data) {
+    var res = $.parseJSON(data);
+    if (!(res.status === "success")) {
+        alert("Bus Location Not Added");
+        return;
+    }
+
 }
 
 function errorFunction() {

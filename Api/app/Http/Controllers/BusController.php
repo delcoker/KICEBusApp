@@ -15,32 +15,30 @@ use App\Buses;
 use App\Drivers;
 use App\BusLocation;
 use Carbon\Carbon;
+use Response;
+class BusController extends Controller {
 
-class BusController extends Controller
-{
     //
 
-    function addBusLocation(){
+    function addBusLocation() {
 
 
-    	$data = Input::get();
-    	$busLocation = new BusLocation; 
+        $data = Input::get();
+        $busLocation = new BusLocation;
 
-    	$busLocation->name = $data['name'];
-    	$busLocation->longitude = $data['longitude'];
-    	$busLocation->latitude = $data['latitude'];
-    	$busLocation->route_id = $data['route_id'];
-    	$busLocation->bus_id = $data['bus_id'];
+        $busLocation->name = $data['name'];
+        $busLocation->longitude = $data['longitude'];
+        $busLocation->latitude = $data['latitude'];
+        $busLocation->route_id = $data['route_id'];
+        $busLocation->bus_id = $data['bus_id'];
 
-    	if($busLocation->save()){
-    		$res_json = '{"status":"success", "message":"Bus location added"}';
-    	}
-    	else{
-    		$res_json = '{"status":"failed", "message":"Unable to add bus location"}';
-    	}
+        if ($busLocation->save()) {
+            $res_json = '{"status":"success", "message":"Bus location added"}';
+        } else {
+            $res_json = '{"status":"failed", "message":"Unable to add bus location"}';
+        }
 
-    	return $res_json;
-
+        return Response::json($res_json)->setCallback(Input::get('callback'));
     }
 
     function getBusLocation(){
@@ -53,6 +51,6 @@ class BusController extends Controller
     	else{
     		$res_json = '{"status":"failed", "message":"Unable to get bus location"}';
     	}
-    	return $res_json;
+    	 return Response::json($res_json)->setCallback(Input::get('callback'));
     }
 }

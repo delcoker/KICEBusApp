@@ -6,13 +6,12 @@ use App\User;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+//use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\Registrar;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 
 class AuthController extends Controller {
-
     /*
     |--------------------------------------------------------------------------
     | Registration & Login Controller
@@ -24,7 +23,7 @@ class AuthController extends Controller {
     |
     */
 
-    use AuthenticatesAndRegistersUsers;
+use AuthenticatesAndRegistersUsers;
 
     /**
      * Create a new authentication controller instance.
@@ -34,7 +33,6 @@ class AuthController extends Controller {
      * @return void
      */
     public function __construct(Guard $auth, Registrar $registrar)
-    {
         $this->auth = $auth;
         $this->registrar = $registrar;
 

@@ -4,9 +4,11 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use Input;
+use Response;
 
-class Authenticate
-{
+class Authenticate {
+
     /**
      * Handle an incoming request.
      *
@@ -15,17 +17,18 @@ class Authenticate
      * @param  string|null  $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
-    {
+    public function handle($request, Closure $next, $guard = null) {
+        // dd(Auth());
         if (Auth::guard($guard)->guest()) {
             if ($request->ajax() || $request->wantsJson()) {
                 return response('Unauthorized.', 401);
             } else {
-                return response()->json(['status' => 'Unauthorized', 'message' => 'Please login in First']);
-               
+                return response()->json(['status' => 'Unauthorized', 'message' => 'Please login in First'])->setCallback(Input::get('callback'));
+//                return Response::json(['status' => 'Unauthorized', 'message' => 'Please login in First'])->setCallback(Input::get('callback'));
             }
         }
 
         return $next($request);
     }
+
 }

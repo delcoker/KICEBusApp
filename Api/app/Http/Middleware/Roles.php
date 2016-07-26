@@ -4,9 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Auth;
+use Input;
 
-class Roles
-{
+class Roles {
+
     /**
      * Handle an incoming request.
      *
@@ -14,15 +15,15 @@ class Roles
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
-    {
+    public function handle($request, Closure $next) {
+
         $user = Auth::user();
-        if ($user->role !='conductor') {
-            return response()
-                ->json(['status' => 'Unauthorized', 'message' => 'You do not have the permission to view this page']);
-          
+       // dd($user);
+        if ($user->role != 'conductor') {
+            return response()->json(['status' => 'Unauthorized', 'message' => 'You do not have the permission to view this page'])->setCallback(Input::get('callback'));
         }
 
         return $next($request);
     }
+
 }

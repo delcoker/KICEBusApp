@@ -10,21 +10,27 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-
+Event::listen('illuminate.query', function($query) {
+    var_dump($query->sql);
+});
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::auth();
 
-Route::post('/login', 'UsersController@postLogin');
+Route::get('/login', 'UsersController@postLogin');
+
+//Route::post('transaction','TransactionController@transaction');
 
 $router->group(['middleware' => 'auth'], function() {
-    
 
-	 // Only authenticated users may enter...
 
-	Route::get('logout', array('as'=>'logout','uses'=>'UsersController@logout'));
+    // Only authenticated users may enter...
+
+    Route::get('logout', array('as' => 'logout', 'uses' => 'UsersController@logout'));
+
+    Route::get('settings', array('as' => 'settings', 'middleware' => 'role', 'uses' => 'UsersController@saveSettings'));
 
 	Route::get('unpaidoccupants', array('as'=>'unpaidoccupants','middleware' => 'role', 'uses'=>'UsersController@getUnpaidOccupants'));
 
@@ -33,3 +39,5 @@ $router->group(['middleware' => 'auth'], function() {
 	Route::get('buslocation', array('as'=>'buslocation','uses'=>'BusController@getBusLocation'));
 	Route::post('buslocation', array('as'=>'buslocation','uses'=>'BusController@addBusLocation'));
 });
+
+
