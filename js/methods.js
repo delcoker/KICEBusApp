@@ -138,7 +138,6 @@ function sendBusXY() {
         , route_id: route_id
         , name: location_name});
 
-
 }
 
 
