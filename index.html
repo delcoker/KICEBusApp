@@ -54,6 +54,9 @@
                             <div> &nbsp; </div><label></label>
                             <a href="#route_selelct" role="button" class="ui-shadow ui-btn ui-corner-all" data-transition="flip" onclick="login()" >Login</a>
 
+                            <div> &nbsp; </div><label></label>
+                            <a href="#route_selelct" role="button" class="ui-shadow ui-btn ui-corner-all" data-transition="flip" onclick="login_passenger()" >Login Admin</a>
+
                             <!--                            <button onclick="">keep awake</button>
                                                         <div> &nbsp; </div><label></label>
                                                         <button onclick="window.plugins.insomnia.allowSleepAgain()">allow sleep again</button>-->
@@ -67,6 +70,37 @@
             <h1>ICE-K Works</h1>
         </div>
     </div>
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <div data-role="page" data-dialog="false" id="settings_select_passenger" data-theme="c">
+
+            <div data-role="header">
+                <h1>Bus App </h1>
+                <a href="#pageone" data-role="button" data-icon="" data-iconpos="right" class="ui-btn-left"><div class="">Hi </div></a>
+                <a href="#pageone" data-role="button" data-icon="arrow-u" data-iconpos="right" class="ui-btn-right"  onclick="logout()">Logout</a>
+            </div>
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - -->
+            <div role="main" class="ui-content">
+                <img src="resources/ash_logo.png" width='128' height="30" alt="" style='float: right'/>
+                <h1>Settings:</h1>
+
+                <h2>Routes</h2><h4 id="selected_route_passenger"></h4>
+                <ul data-role="listview" data-inset="true" data-filter="true" id="settings_route_passenger">
+                    <li><a href="#route_save" onclick="route_save_passenger()">ROUTES</a></li>
+                </ul>
+                <br>
+
+                <a href="#" role="button" class="ui-shadow ui-btn ui-corner-all" data-transition="flip" onclick="settings_save_passenger()">Save</a>
+            </div>
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+            <div data-role="footer">
+                <div data-role="controlgroup" data-type="horizontal">
+                    <!--<Caption of group:</p>-->
+                    <a href="#" data-icon="arrow-l"  data-role="button" data-rel="back">Go Back</a>
+                    <!--<h1>ICE-K Works</h1>-->
+                </div>
+
+            </div>
+        </div>
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
         <div data-role="page" data-dialog="false" id="settings_select" data-theme="c">
 
@@ -146,7 +180,7 @@
 
             <div data-role="header">
                 <h1>Bus App </h1>
-                <a href="#map-page" data-role="button" data-icon="" data-iconpos="right" class="ui-btn-left"><div>Hi </div></a>
+                <a href="#map-page" data-role="button" data-icon="" data-iconpos="right" class="ui-btn-left"><div onclick='initLocationProcedure()'>Hi </div></a>
                 <a href="#pageone" data-role="button" data-icon="arrow-u" data-iconpos="right" class="ui-btn-right"  onclick="logout()">Logout</a>
             </div>
             <!-- - - - - - - - - - - - - - - - - - - - - - - - - - -->
