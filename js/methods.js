@@ -24,10 +24,10 @@ var curLat = 100;
 
 var http_or_https = "        s               ";                 // insert an "s" anywhere here if you want the request to go as https
 //var ip = "192.168.8.102";                                     //  Home
-//var ip = "10.10.26.210";                                        //  School
+var ip = "10.10.26.210";                                        //  School
 //var ip = "192.168.100.10";                                    //  Apa
 //var ip = "166.62.103.147";                                    //  Server
-var ip = "10.10.43.208";                                    //  Ashesi Room
+//var ip = "10.10.43.208";                                    //  Ashesi Room
 
 
 // url after domain
@@ -62,6 +62,27 @@ function login() {
     var url = phonegap + "login";
 
     var res = syncAjaxGetLogin(url, {username: username, password: password});
+    try {
+        window.plugins.insomnia.keepAwake();
+    }
+    catch (e) {
+
+    }
+}
+
+
+function login_passenger() {
+    if ($("#ip").val().length > 2) {
+        ip = $("#ip").val();
+        phonegap = "http" + http_or_https.trim() + "://" + ip + afterDomainURL;
+//        prompt("url", phonegap);
+    }
+
+    var username = $("#username").val();
+    var password = $("#password").val();
+    var url = phonegap + "loginpassenger";
+
+    syncAjaxGetLoginPassenger(url, {username: username, password: password});
     try {
         window.plugins.insomnia.keepAwake();
     }
@@ -117,12 +138,11 @@ function sendBusXY() {
         , route_id: route_id
         , name: location_name});
 
-
 }
 
 
-//function initLocationProcedure() {
-$(document).on("pageshow", "#map-page", function () {
+function initLocationProcedure() {
+//$(document).on("pageshow", "#map-page", function () {
 
     var map,
             currentPositionMarker,
@@ -207,7 +227,8 @@ $(document).on("pageshow", "#map-page", function () {
             alert("Your browser does not support the Geolocation API!");
         }
     }
-});
+//});
+}
 
 function route_save(id) {
 
@@ -338,6 +359,97 @@ function bus_select(id) {
     $('#busses').listview().listview('refresh');
     window.open("index.html#bus_select", "_self");
 }
+
+function wheres_my_bus(res) {
+    bus_id = res.defaultSettings[0].bus_id;
+}
+
+$(document).on("pageshow", "#map-page-passenger", function () {
+
+    var map,
+            currentPositionMarker,
+            mapCenter = new google.maps.LatLng(4.6037168, -0.7869644),
+            map;
+
+    // you can specify the default lat long
+    initLocationProcedure();
+
+    // change the zoom if you want
+    function initializeMap()
+    {
+        map = new google.maps.Map(document.getElementById('map-canvas'), {
+            zoom: 15,
+            center: mapCenter,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+    }
+
+    google.maps.event.addDomListener(window, 'resize', function () {
+        var center = map.getCenter();
+        map.setCenter(center);
+    });
+// And aditionally you can need use "trigger" for real responsive
+    google.maps.event.trigger(map, "resize");
+
+    function locError(error) {
+        // tell the user if the current position could not be located
+        alert("The current position could not be found!");
+    }
+
+    // current position of the user
+    function setCurrentPosition(pos) {
+        currentPositionMarker = new google.maps.Marker({
+            map: map,
+            position: new google.maps.LatLng(
+                    pos.coords.latitude,
+                    pos.coords.longitude
+                    ),
+            title: "Current Position"
+        });
+        map.panTo(new google.maps.LatLng(
+                pos.coords.latitude,
+                pos.coords.longitude
+                ));
+    }
+
+    function displayAndWatch(position) {
+
+        // set current position
+        setCurrentPosition(position);
+
+        // watch position
+        watchCurrentPosition();
+    }
+
+    function watchCurrentPosition() {
+        var positionTimer = navigator.geolocation.watchPosition(
+                function (position) {
+                    setMarkerPosition(
+                            currentPositionMarker,
+                            position
+                            );
+                });
+    }
+
+    function setMarkerPosition(marker, position) {
+        marker.setPosition(
+                new google.maps.LatLng(
+                        position.coords.latitude,
+                        position.coords.longitude)
+                );
+    }
+
+
+    function initLocationProcedure() {
+        initializeMap();
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(displayAndWatch, locError);
+        } else {
+            // tell the user if a browser doesn't support this amazing API
+            alert("Your browser does not support the Geolocation API!");
+        }
+    }
+});
 
 function passengers_select(res) {
 
@@ -503,6 +615,16 @@ function syncAjaxGetLogin(u, arr) {
     });
 }
 
+function syncAjaxGetLoginPassenger(u, arr) {
+    var obj = $.ajax({url: u, async: false
+        , type: 'GET'
+        , crossDomain: true
+        , data: arr
+        , dataType: 'jsonp'
+        , jsonpCallback: 'callbackAjaxLoginPassengerSuccessful'
+    });
+}
+
 function syncAjaxSaveSettings(u, arr) {
     $.ajax({url: u, async: false
         , type: 'GET'
@@ -596,6 +718,40 @@ function callbackAjaxLoginSuccessful(data) {
     }
     else {
         passengers_select(res);
+    }
+
+//    prompt("successful ajax call ", data);
+}
+
+function callbackAjaxLoginPassengerSuccessful(data) {
+    var res = $.parseJSON(data);
+    if (!(res.status === 'success')) {
+
+        alert(res.message);
+        return;
+    }
+    if (res.defaultSettings.first_time) {
+// load routes
+        res.routes.sort(sort_by('name', false, function (a) {
+            return a.toUpperCase();
+        }));
+        all_routes = res.routes;
+        var route_listings = '<ul data-role="listview" data-inset="true" data-filter="true" id="settings_route_passenger">';
+        $.each(res.routes, function (key, value) {
+            route_listings += '<li><a href="#route_save" onclick="route_save(' + value.route_id + ')">';
+            route_listings += "<img src='" + 'resources/2.jpg' + "' alt=''>";
+            route_listings += "<h2>" + value.name + "</h2>";
+            route_listings += "<p>" + value.name + "</p>";
+            route_listings += '</a></li> ';
+        });
+        route_listings += '</ul>';
+        $("#settings_route").replaceWith(route_listings);
+        $('#settings_route').listview().listview('refresh');
+
+        window.open("index.html#settings_select", "_self");
+    }
+    else {
+        wheres_my_bus(res);
     }
 
 //    prompt("successful ajax call ", data);
