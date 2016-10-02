@@ -16,13 +16,13 @@
     <icon src="resources/bus.png"/>
     <gap:splash src="splash.png"/>
     <!--<gap:plugin name="com.phonegap.plugins.barcodescanner" version="2.2.0"/>-->
-    <!--    <plugin name="cordova-plugin-whitelist" spec="1.3.0" />
-    <plugin name="cordova-plugin-insomnia" spec="4.2.0" /> -->
+    <plugin name="cordova-plugin-whitelist" spec="1.3.0" />
+    <plugin name="cordova-plugin-insomnia" spec="4.2.0" />
     <!--<gap:plugin name="cordova.plugins.diagnostic" source="npm" />-->
     <!--<gap:plugin name="cordova-plugin-request-location-accuracy" source="npm" />  doesnt work-->
     <!--<gap:plugin name="cordova-plugin-mauron85-background-geolocation-phonegapbuild" source="npm"/>  does not work-->
     <!--<gap:plugin name="fr.louisbl.cordova.gpslocation" source="pgb" />-->
-    <!--<plugin name="org.transistorsoft.cordova.background-geolocation" source="pgb" spec="0.3.5" />-->
+    <plugin name="org.transistorsoft.cordova.background-geolocation" source="pgb" spec="0.3.5" />
     <!--  run geolocation even in background-->
     <!--<gap:plugin name="com.red_folder.phonegap.plugin.backgroundservice" source="pgb" />-->
     <allow-navigation href="*"/>
