@@ -31,5 +31,5 @@
     <allow-intent href="*"/>
     <access origin="*"/>
 
-    <!--<preference name="4.1.1" value="cli-5.2.0" />-->
+    <preference name="3.7.0" value="cli-6.3.0" />
 </widget>
