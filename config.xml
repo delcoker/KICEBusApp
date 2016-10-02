@@ -21,7 +21,7 @@
     <!--<gap:plugin name="cordova.plugins.diagnostic" source="npm" />-->
     <!--<gap:plugin name="cordova-plugin-request-location-accuracy" source="npm" />  doesnt work-->
     <!--<gap:plugin name="cordova-plugin-mauron85-background-geolocation-phonegapbuild" source="npm"/>  doedsnt work-->
-    <gap:plugin name="fr.louisbl.cordova.gpslocation" source="pgb" />
+    <!--<gap:plugin name="fr.louisbl.cordova.gpslocation" source="pgb" />-->
     <gap:plugin name="org.transistorsoft.cordova.background-geolocation" source="pgb" />    <!--  run geolocation even in background-->
     <!--<gap:plugin name="com.red_folder.phonegap.plugin.backgroundservice" source="pgb" />-->
     <allow-navigation href="*"/>
