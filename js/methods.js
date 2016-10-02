@@ -23,8 +23,8 @@ var curLat = 100;
 
 
 var http_or_https = "        s               ";                 // insert an "s" anywhere here if you want the request to go as https
-//var ip = "192.168.8.102";                                     //  Home
-var ip = "10.10.26.210";                                        //  School
+var ip = "192.168.8.100";                                     //  Home
+//var ip = "10.10.26.210";                                        //  School
 //var ip = "192.168.100.10";                                    //  Apa
 //var ip = "166.62.103.147";                                    //  Server
 //var ip = "10.10.43.208";                                    //  Ashesi Room
