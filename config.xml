@@ -24,7 +24,7 @@
     <!--<gap:plugin name="fr.louisbl.cordova.gpslocation" source="pgb" />-->
     <!--<plugin name="org.transistorsoft.cordova.background-geolocation" source="pgb" spec="0.3.5" />-->
     <plugin name="org.apache.cordova.geolocation" spec="0.3.7" source="pgb" />
-    <plugin name="wellbload.cordova.background-geolocation" spec="0.3.4" source="pgb" />
+    <!--<plugin name="wellbload.cordova.background-geolocation" spec="0.3.4" source="pgb" />-->
     <!--  run geolocation even in background-->
     <!--<gap:plugin name="com.red_folder.phonegap.plugin.backgroundservice" source="pgb" />-->
     <allow-navigation href="*"/>
